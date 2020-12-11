@@ -65,18 +65,41 @@ export default {
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
+    "@nuxtjs/fontawesome",
     // https://go.nuxtjs.dev/typescript
     "@nuxt/typescript-build"
   ],
+  // fontawesome: {
+  //   icons: ["fabGithub"]
+  // },
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
+    // "nuxt-fontawesome",
     // https://go.nuxtjs.dev/bootstrap
     "bootstrap-vue/nuxt",
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
-    "@nuxtjs/auth-next"
+    "@nuxtjs/auth-next",
+    "@nuxtjs/google-fonts"
   ],
+  fontawesome: {
+    icons: {
+      solid: true,
+      brands: true
+    }
+  },
+  googleFonts: {
+    families: {
+      "JetBrains+Mono": true,
+      "Ubuntu+Mono": true
+      // Lato: [100, 300],
+      // Raleway: {
+      //   wght: [100, 400],
+      //   ital: [100]
+      // }
+    }
+  },
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {},

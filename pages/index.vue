@@ -1,10 +1,23 @@
 <template>
-  <div class="container">
-    <button v-if="!user" @click="$auth.loginWith('github')">
-      Login with Github
-    </button>
-    <button v-else>Dashboard of {{ user.name }}</button>
-    <button @click="$auth.logout()">Logout</button>
+  <div class="container pt-5">
+    <div class="row mt-5">
+      <div class="col-md-6">
+        <h1>GitWrapped</h1>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut rutrum
+          vehicula accumsan. Maecenas ornare iaculis augue, a ullamcorper turpis
+          rhoncus eget. Vivamus lobortis eu metus sed venenatis. Nulla nulla
+          felis, auctor eget justo ut, sollicitudin luctus velit.
+        </p>
+        <button v-if="!user" @click="$auth.loginWith('github')">
+          Login with Github
+        </button>
+        <nuxt-link class="button-me" to="/dashboard" v-else
+          >Dashboard of {{ user.name }}</nuxt-link
+        >
+        <button @click="$auth.logout()">Logout</button>
+      </div>
+    </div>
     <!-- <div>
       <Logo />
       <h1 class="title">
@@ -48,15 +61,6 @@ export default Vue.extend({
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
 .title {
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;

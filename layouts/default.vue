@@ -5,23 +5,39 @@
 </template>
 
 <style>
-html {
-  font-family:
-    'Source Sans Pro',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
-    sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
+:root {
+  --bg: #090915;
+  --accent: #3500d3;
+  --text: white;
+}
+button,
+.button-me {
+  border: 3px solid var(--accent);
+  background: none;
+  color: white;
+  font-size: 20px;
+  padding: 10px;
+  transition: 0.3s all;
+}
+button:hover,
+.button-me:hover {
+  color: white;
+  text-decoration: none !important;
+  background: var(--accent);
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+.title {
+  font-family: "JetBrains Mono", monospace;
+}
+html,
+body {
+  background: var(--bg);
+  color: white;
+  font-family: "Ubuntu Mono", monospace;
 }
 
 *,
