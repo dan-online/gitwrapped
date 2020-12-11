@@ -277,10 +277,10 @@ export default {
             { a: 0, d: 0, c: 0 }
           );
           this.repos[index].contributions = {
-            total: contributions.total,
-            a: adc.a,
-            d: adc.d,
-            c: adc.c
+            total: contributions.total || 0,
+            a: adc.a || 0,
+            d: adc.d || 0,
+            c: adc.c || 0
           };
           this.fetchAllCommits(cb, 0, index + 1, []);
         })
