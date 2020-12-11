@@ -1,5 +1,5 @@
 <template>
-  <div class="limit">
+  <div class="limit" v-if="stars.length >= 1">
     <transition name="fade">
       <div v-if="show">
         <div class="mb-2">
