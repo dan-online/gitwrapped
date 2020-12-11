@@ -276,6 +276,7 @@ export default {
             },
             { a: 0, d: 0, c: 0 }
           );
+          console.log(adc);
           this.repos[index].contributions = {
             total: contributions.total || 0,
             a: adc.a || 0,
