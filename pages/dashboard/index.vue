@@ -143,7 +143,7 @@
                   <b
                     >{{
                       repos.reduce(
-                        (prev, curr) => (prev += curr.contributions.a),
+                        (prev, curr) => (prev += curr.contributions.a || 0),
                         0
                       )
                     }}
@@ -152,7 +152,7 @@
                   <b
                     >{{
                       repos.reduce(
-                        (prev, curr) => (prev += curr.contributions.d),
+                        (prev, curr) => (prev += curr.contributions.d || 0),
                         0
                       )
                     }}
@@ -162,7 +162,7 @@
                   <b
                     >{{
                       repos.reduce(
-                        (prev, curr) => (prev += curr.contributions.c),
+                        (prev, curr) => (prev += curr.contributions.c || 0),
                         0
                       )
                     }}
@@ -276,12 +276,11 @@ export default {
             },
             { a: 0, d: 0, c: 0 }
           );
-          console.log("CONT", adc);
           this.repos[index].contributions = {
-            total: contributions.total || 0,
-            a: adc.a || 0,
-            d: adc.d || 0,
-            c: adc.c || 0
+            total: contributions.total,
+            a: adc.a,
+            d: adc.d,
+            c: adc.c
           };
           this.fetchAllCommits(cb, 0, index + 1, []);
         })
