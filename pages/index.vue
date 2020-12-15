@@ -55,7 +55,7 @@ export default Vue.extend({
     };
   },
   mounted() {
-    console.log(this.$auth);
+    // console.log(this.$auth);
   }
 });
 </script>

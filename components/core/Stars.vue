@@ -15,22 +15,29 @@
         <a :href="item.html_url" target="_blank" class="repoName">
           <h3>{{ item.full_name }}</h3>
         </a>
-        <p>{{ item.description }}</p>
+        <p>{{ item.description.slice(0, 140) }}</p>
         <a :href="item.stargazers_url" target="_blank"
-          ><font-awesome-icon :icon="['fas', 'star']"></font-awesome-icon>
-          {{ item.stargazers_count }}</a
+          ><font-awesome-icon
+            :icon="['fas', 'star']"
+            class="mr-2"
+          ></font-awesome-icon
+          >{{ item.stargazers_count }}</a
         >
         |
         <a :href="item.html_url + '/watchers'" target="_blank"
-          ><font-awesome-icon :icon="['fas', 'eye']"></font-awesome-icon>
-          {{ item.watchers_count == 0 ? 1 : item.watchers_count }}</a
+          ><font-awesome-icon
+            :icon="['fas', 'eye']"
+            class="mr-2"
+          ></font-awesome-icon
+          >{{ item.watchers_count == 0 ? 1 : item.watchers_count }}</a
         >
         |
         <a :href="item.forks_url" target="_blank"
           ><font-awesome-icon
             :icon="['fas', 'code-branch']"
-          ></font-awesome-icon>
-          {{ item.forks_count }}</a
+            class="mr-2"
+          ></font-awesome-icon
+          >{{ item.forks_count }}</a
         >
       </div>
     </transition>
@@ -80,7 +87,6 @@ export default {
       setTimeout(() => {
         this.item = this.repos[++this.idx];
         if (!this.item) this.item = this.repos[0];
-        console.log(this.item);
         this.show = true;
       }, 1000);
     }, 6000);
@@ -100,5 +106,9 @@ export default {
 .limit {
   min-height: 200px;
   max-height: 200px;
+}
+.limit a {
+  color: white;
+  text-decoration: underline;
 }
 </style>

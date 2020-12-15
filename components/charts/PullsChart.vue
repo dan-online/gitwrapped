@@ -1,5 +1,10 @@
 <template>
-  <RadarChart :options="options" :data="data"></RadarChart>
+  <RadarChart
+    style="height:350px"
+    :height="350"
+    :options="options"
+    :data="data"
+  ></RadarChart>
 </template>
 
 <script>

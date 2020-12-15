@@ -5,7 +5,7 @@
         <div class="col-md-8 mx-auto text-center">
           <h1 class="mb-3">Please wait while we crunch the data!</h1>
           <Progress class="mb-3" :val="progress.value"></Progress>
-          <span>{{ progress.name }} - {{ progress.value }}%</span>
+          <span>{{ progress.name }} - {{ Math.round(progress.value) }}%</span>
         </div>
       </div>
     </transition>
@@ -18,6 +18,10 @@
             :src="user.avatar_url"
           />
           <h2 class="mt-2 mb-1">{{ user.name }}</h2>
+          <span
+            ><b>{{ user.followers }}</b> followers,
+            <b>{{ user.following }} following</b></span
+          >
           <p class="px-md-5 mx-md-5">{{ user.bio }}</p>
           <a class="icon" target="_blank" :href="user.html_url">
             <font-awesome-icon :icon="['fab', 'github']" />
@@ -29,6 +33,41 @@
         <div class="col-md-10 mx-auto px-0 mt-4">
           <div class="container px-0 no-gutters">
             <div class="row box p-4 no-gutters">
+              <div class="col-md-6">
+                <div class="container">
+                  <div class="row pr-3">
+                    <div class="col-md-2 text-center">
+                      <b class="statIcon"
+                        ><font-awesome-icon
+                          :icon="['fas', 'users']"
+                        ></font-awesome-icon
+                      ></b>
+                    </div>
+                    <div class="col-md-10">
+                      <h4>{{ user.followers }} followers</h4>
+                      <p>
+                        People are liking what they are seeing from you, keep up
+                        the good work. Some notable followers who followed you
+                        were
+                        <b>{{
+                          followers
+                            .map(x => x.login)
+                            .slice(0, 3)
+                            .join(", ")
+                        }}</b>
+                        and of course, us!
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <h2>Info</h2>
+                <hr />
+                <p>You put in a lot of good work this year and</p>
+              </div>
+            </div>
+            <div class="row box p-4 mt-4 no-gutters">
               <div class="col-md-6 ">
                 <h2>Top Languages</h2>
                 <hr />
@@ -115,7 +154,7 @@
                 <p>
                   You starred <b>{{ stars.length }}</b> repositories, way to
                   contribute to the community. Not only were you a star but you
-                  also kept on eye on <b>{{ watches.length }}</b> repositories!
+                  also kept an eye on <b>{{ watches.length }}</b> repositories!
                 </p>
               </div>
             </div>
@@ -212,6 +251,8 @@ export default {
       languages: [],
       pulls: [],
       issues: [],
+      following: [],
+      followers: [],
       jan: new Date(new Date().getFullYear().toString()).toISOString(),
       topRepo: null,
       finished: false,
@@ -233,11 +274,35 @@ export default {
           }
         });
     },
+    fetchAllFollowers(cb, index = 0) {
+      this.$auth.ctx.$axios
+        .get(`https://api.github.com/user/followers?per_page=100&page=${index}`)
+        .then(followers => {
+          this.followers = [...this.followers, ...followers.data];
+          if (followers.data.length >= 100) {
+            return this.fetchAllFollowers(cb, index + 1);
+          } else {
+            return cb();
+          }
+        });
+    },
+    fetchAllFollowing(cb, index = 0) {
+      this.$auth.ctx.$axios
+        .get(`https://api.github.com/user/following?per_page=100&page=${index}`)
+        .then(following => {
+          this.following = [...this.following, ...following.data];
+          if (following.data.length >= 100) {
+            return this.fetchAllFollowing(cb, index + 1);
+          } else {
+            return cb();
+          }
+        });
+    },
     fetchAllLanguages(cb, index = 0) {
       const repo = this.repos[index];
       if (!repo) return cb();
       this.progress.value =
-        this.progress.start + (index / this.repos.length) * 20;
+        this.progress.start + (index / this.repos.length) * 10;
       this.$auth.ctx.$axios.get(repo.languages_url).then(languages => {
         const all = Object.entries(languages.data).map(x => ({
           name: x[0],
@@ -257,7 +322,7 @@ export default {
       const repo = this.repos[index];
       if (!repo) return cb();
       this.progress.value =
-        this.progress.start + (index / this.repos.length) * 20;
+        this.progress.start + (index / this.repos.length) * 10;
       this.$auth.ctx.$axios
         .get(`${repo.url}/stats/contributors`)
         .then(info => {
@@ -317,7 +382,12 @@ export default {
     },
     fetchAllPulls(cb, index = 0, page = 0) {
       const repo = this.repos[index];
-      if (!repo) return cb();
+      if (!repo) {
+        this.repos = this.repos.filter(
+          x => new Date(x.created_at).getFullYear() == new Date().getFullYear()
+        );
+        return cb();
+      }
       this.progress.value =
         this.progress.start + (index / this.repos.length) * 10;
       this.$auth.ctx.$axios
@@ -339,7 +409,12 @@ export default {
     },
     fetchAllIssues(cb, index = 0, page = 0) {
       const repo = this.repos[index];
-      if (!repo) return cb();
+      if (!repo) {
+        this.issues = this.issues.filter(
+          x => new Date(x.created_at).getFullYear() == new Date().getFullYear()
+        );
+        return cb();
+      }
       this.progress.value =
         this.progress.start + (index / this.repos.length) * 10;
       this.$auth.ctx.$axios
@@ -422,23 +497,26 @@ export default {
         this.languages.sort((a, b) => b.lines - a.lines);
         this.progress = { start: 30, value: 30, name: "Commits" };
         this.fetchAllCommits(() => {
-          this.progress = { start: 50, value: 50, name: "Stars" };
-          // console.log(this.repos[0].contribution);
+          this.progress = { start: 40, value: 40, name: "Stars" };
           this.topRepo = this.repos.sort(
             (a, b) => b.contributions.c - a.contributions.c
           )[0];
-          console.log(this.topRepo.contributions);
           this.fetchAllStars(() => {
-            this.progress = { start: 70, value: 70, name: "Watches" };
+            this.progress = { start: 50, value: 50, name: "Watches" };
             this.fetchAllWatches(() => {
-              this.progress = { start: 80, value: 80, name: "Pulls" };
+              this.progress = { start: 60, value: 60, name: "Pulls" };
               this.fetchAllPulls(() => {
-                this.progress = { start: 90, value: 90, name: "Issues" };
+                this.progress = { start: 70, value: 70, name: "Issues" };
                 this.fetchAllIssues(() => {
-                  console.log(this.issues[0]);
-                  this.progress = { value: 100, name: "Render" };
-                  this.$nextTick(() => {
-                    this.finished = true;
+                  this.progress = { start: 80, value: 80, name: "Followers" };
+                  this.fetchAllFollowers(() => {
+                    this.progress = { start: 90, value: 90, name: "Following" };
+                    this.fetchAllFollowing(() => {
+                      this.progress = { value: 100, name: "Render" };
+                      this.$nextTick(() => {
+                        this.finished = true;
+                      });
+                    });
                   });
                 });
               });
@@ -456,6 +534,9 @@ hr {
   border-color: white;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+}
+.statIcon {
+  font-size: 30px;
 }
 .icon {
   font-size: 25px;
@@ -475,6 +556,9 @@ thead th {
 }
 b {
   color: #7075ff;
+}
+.icon {
+  font-size: 20px;
 }
 .box {
   background: rgba(0, 0, 0, 0.4);
