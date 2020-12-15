@@ -19,7 +19,7 @@
     "@types/passport": "^1.0.4",
     "@types/passport-github2": "^1.2.4",
     "bootstrap": "^4.5.2",
-    "bootstrap-vue": "^2.17.3",
+    "bootstrap-vue": "^2.21.0",
     "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
     "express-session": "^1.17.1",
