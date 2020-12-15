@@ -43,28 +43,83 @@
                         ></font-awesome-icon
                       ></b>
                     </div>
-                    <div class="col-md-10">
-                      <h4>{{ user.followers }} followers</h4>
-                      <p>
-                        People are liking what they are seeing from you, keep up
-                        the good work. Some notable followers who followed you
-                        were
-                        <b>{{
-                          followers
-                            .map(x => x.login)
-                            .slice(0, 3)
-                            .join(", ")
-                        }}</b>
-                        and of course, us!
-                      </p>
+                    <div class="col-md-10 pt-2">
+                      <h4>{{ user.followers }} users followers</h4>
+                    </div>
+                  </div>
+                  <div class="row pr-3 mt-2">
+                    <div class="col-md-2 text-center">
+                      <b class="statIcon"
+                        ><font-awesome-icon
+                          :icon="['fas', 'user-plus']"
+                        ></font-awesome-icon
+                      ></b>
+                    </div>
+                    <div class="col-md-10 pt-2">
+                      <h4>{{ user.following }} users followed</h4>
+                    </div>
+                  </div>
+                  <div class="row pr-3 mt-2">
+                    <div class="col-md-2 text-center">
+                      <b class="statIcon"
+                        ><font-awesome-icon
+                          :icon="['fas', 'door-closed']"
+                        ></font-awesome-icon
+                      ></b>
+                    </div>
+                    <div class="col-md-10 pt-2">
+                      <h4>{{ user.owned_private_repos }} private repos</h4>
+                    </div>
+                  </div>
+                  <div class="row pr-3 mt-2">
+                    <div class="col-md-2 text-center">
+                      <b class="statIcon"
+                        ><font-awesome-icon
+                          :icon="['fas', 'save']"
+                        ></font-awesome-icon
+                      ></b>
+                    </div>
+                    <div class="col-md-10 pt-2">
+                      <h4>
+                        {{ formatBytes(user.disk_usage * 1000) }} of disk usage
+                      </h4>
+                    </div>
+                  </div>
+                  <div class="row pr-3 mt-2">
+                    <div class="col-md-2 text-center">
+                      <b class="statIcon"
+                        ><font-awesome-icon
+                          :icon="['fas', 'clock']"
+                        ></font-awesome-icon
+                      ></b>
+                    </div>
+                    <div class="col-md-10 pt-2">
+                      <h4>
+                        {{
+                          formatDuration(
+                            (new Date() - new Date(user.created_at)) / 1000
+                          )
+                        }}
+                        with Github
+                      </h4>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-6 mt-4 mt-md-0">
                 <h2>Info</h2>
                 <hr />
-                <p>You put in a lot of good work this year and</p>
+                <p>
+                  People are liking what they are seeing from you, keep up the
+                  good work. Some notable followers who followed you were
+                  <b>{{
+                    followers
+                      .map(x => x.login)
+                      .slice(0, 3)
+                      .join(", ")
+                  }}</b>
+                  and of course, us!
+                </p>
               </div>
             </div>
             <div class="row box p-4 mt-4 no-gutters">
@@ -103,7 +158,8 @@
                         0
                       ) *
                         66) /
-                        100
+                        100,
+                      true
                     )
                   }}</b>
                   of continous work<br />
@@ -464,19 +520,31 @@ export default {
       }
       return (num / si[i].value).toFixed(1).replace(rx, "$1") + si[i].symbol;
     },
-    formatDuration(secs) {
+    formatDuration(secs, extra) {
       if (secs < 60) {
         return secs + " seconds";
       }
       let mins = Math.round(secs / 60);
       if (mins < 60) {
-        return mins + " minutes";
+        return (
+          mins + " minutes" + (extra ? " and " + (secs % 60) + " seconds " : "")
+        );
       }
       let hrs = Math.round(mins / 60);
       if (hrs < 24) {
-        return hrs + " hours";
+        return (
+          hrs + " hours" + (extra ? " and " + (mins % 60) + " minutes " : "")
+        );
       }
-      return Math.round(hrs / 24) + " days";
+      let days = Math.round(hrs / 24);
+      if (days < 365) {
+        return days + " days" + (extra ? " and " + (hrs % 24) + " hours " : "");
+      }
+      return (
+        Math.round(days / 365) +
+        " years" +
+        (extra ? " and " + (days % 365) + " days " : "")
+      );
     }
   },
   mounted() {
