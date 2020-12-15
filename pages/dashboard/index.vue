@@ -63,12 +63,12 @@
                     <div class="col-md-2 text-center">
                       <b class="statIcon"
                         ><font-awesome-icon
-                          :icon="['fas', 'door-closed']"
+                          :icon="['fas', 'door-open']"
                         ></font-awesome-icon
                       ></b>
                     </div>
                     <div class="col-md-10 pt-2">
-                      <h4>{{ user.owned_private_repos }} private repos</h4>
+                      <h4>{{ user.public_repos }} public repos</h4>
                     </div>
                   </div>
                   <div class="row pr-3 mt-2">
