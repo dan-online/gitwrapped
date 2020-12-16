@@ -16,6 +16,8 @@
 
       <div class="my-auto custom-control custom-switch">
         <input
+          ref="switch"
+          :value="on"
           @input="input"
           type="checkbox"
           class="custom-control-input"
@@ -37,7 +39,7 @@ export default {
         accent: "#3500d3",
         text: "black",
         "accent-light": "#76cca8",
-        "box-bg": "#3500d3"
+        "box-bg": "#110142"
       },
       dark: {
         bg: "#090915",
@@ -48,9 +50,24 @@ export default {
       }
     };
   },
+  mounted() {
+    this.on = Array.from(document.body.classList).find(x => x == "lights-on")
+      ? true
+      : false;
+    if (localStorage.lights == "on") {
+      this.$refs.switch.click();
+    }
+  },
   methods: {
     input(e) {
       this.on = !this.on;
+      if (this.on) {
+        document.body.classList.add("lights-on");
+        localStorage.lights = "on";
+      } else {
+        document.body.classList.remove("lights-on");
+        localStorage.lights = "off";
+      }
       const vars = Object.entries(this[!this.on ? "dark" : "light"]).map(x => ({
         name: "--" + x[0],
         val: x[1]
