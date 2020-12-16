@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-3">
+  <div class="col-md-3" ref="Quick">
     <div class="sticky-top">
       <div class="box">
         <h3>Quick Jump</h3>

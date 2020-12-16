@@ -689,10 +689,10 @@ b {
   font-size: 20px;
 }
 .box {
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--box-bg);
   color: white;
   padding: 25px;
-  border-radius: 0.25rem;
+  border-radius: 1.25rem;
   -webkit-box-shadow: 0px 10px 80px -33px rgba(53, 0, 211, 0.55);
   -moz-box-shadow: 0px 10px 80px -33px rgba(53, 0, 211, 0.55);
   box-shadow: 0px 10px 80px -33px rgba(53, 0, 211, 0.55);

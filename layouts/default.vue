@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Navbar></Navbar>
     <Nuxt />
   </div>
 </template>
@@ -10,6 +11,11 @@
   --accent: #3500d3;
   --text: white;
   --accent-light: #7075ff;
+  --box-bg: rgba(0, 0, 0, 0.4);
+}
+html *,
+html {
+  transition: all 0.5s;
 }
 button,
 .button-me {
