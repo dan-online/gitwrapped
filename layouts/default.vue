@@ -9,6 +9,7 @@
   --bg: #090915;
   --accent: #3500d3;
   --text: white;
+  --accent-light: #7075ff;
 }
 button,
 .button-me {

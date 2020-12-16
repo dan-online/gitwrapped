@@ -15,7 +15,7 @@
         <a :href="item.html_url" target="_blank" class="repoName">
           <h3>{{ item.full_name }}</h3>
         </a>
-        <p>{{ item.description.slice(0, 140) }}</p>
+        <p>{{ item.description.slice(0, 100) }}...</p>
         <a :href="item.stargazers_url" target="_blank"
           ><font-awesome-icon
             :icon="['fas', 'star']"
@@ -104,8 +104,8 @@ export default {
   text-decoration: underline;
 }
 .limit {
-  min-height: 200px;
-  max-height: 200px;
+  min-height: 220px;
+  min-height: 220px;
 }
 .limit a {
   color: white;

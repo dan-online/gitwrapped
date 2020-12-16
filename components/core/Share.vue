@@ -1,0 +1,109 @@
+<template>
+  <div>
+    <a
+      v-for="link in links"
+      :key="link.name"
+      :href="link.url()"
+      target="_blank"
+      class="d-flex mt-2"
+      :title="'Share on ' + link.name"
+    >
+      <font-awesome-icon
+        class="shareIcon"
+        :icon="link.icon"
+        aria-hidden="true"
+      ></font-awesome-icon>
+      <span class="ml-2 shareText">{{ link.name }}</span>
+      <span class="sr-only">Share on {{ link.name }}</span>
+    </a>
+    <!-- 
+    <li>
+      <a
+        href="mailto:?subject=Test&body=Test:%20http%3A%2F%2Flocalhost"
+        target="_blank"
+        title="Send email"
+        ><i class="fas fa-envelope-square fa-2x" aria-hidden="true"></i
+        ><span class="sr-only">Send email</span></a
+      >
+    </li> -->
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    const desc =
+        "Check out GitWrapped by DanCodes, the best way to view your github statistics for the year in one wrapped up website!",
+      url = window.location.origin;
+    return {
+      links: [
+        {
+          name: "Facebook",
+          icon: ["fab", "facebook-square"],
+          url: () =>
+            "https://www.facebook.com/sharer/sharer.php?u=" +
+            url +
+            "&quote=" +
+            desc
+        },
+        {
+          name: "Twitter",
+          icon: ["fab", "twitter-square"],
+          url: () =>
+            "https://twitter.com/intent/tweet?source=" +
+            url +
+            "&text=" +
+            desc +
+            " " +
+            url
+        },
+        {
+          name: "Pinterest",
+          icon: ["fab", "pinterest-square"],
+          url: () =>
+            "http://pinterest.com/pin/create/button/?url=" +
+            url +
+            "&description=" +
+            desc
+        },
+        {
+          name: "Reddit",
+          icon: ["fab", "reddit-square"],
+          url: () =>
+            "http://www.reddit.com/submit?url=" + url + "&title=" + desc
+        },
+        {
+          name: "Linkedin",
+          icon: ["fab", "linkedin"],
+          url: () =>
+            "https://www.linkedin.com/sharing/share-offsite/?url=" +
+            url +
+            "&title=" +
+            desc +
+            "&summary=Check it out at " +
+            url +
+            "&source=" +
+            url
+        },
+        {
+          name: "Email",
+          icon: ["fa", "envelope-square"],
+          url: () =>
+            "mailto:?subject=Check out " + url + "&body=" + desc + " " + url
+        }
+      ]
+    };
+  }
+};
+</script>
+
+<style>
+.shareIcon {
+  color: var(--accent-light);
+  font-size: 33px;
+}
+.shareText {
+  color: white;
+  font-size: 20px;
+}
+</style>
