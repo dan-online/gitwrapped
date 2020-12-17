@@ -2,7 +2,7 @@
   <div class="container max">
     <transition name="fade" mode="out-in">
       <div class="row pt-5" v-if="!finished">
-        <div class="col-md-8 mx-auto text-center">
+        <div class="col-md-8 mx-auto text-text text-center">
           <h1 class="mb-3">Please wait while we crunch the data!</h1>
           <Progress class="mb-3" :val="progress.value"></Progress>
           <span>{{ progress.name }} - {{ Math.round(progress.value) }}%</span>
@@ -334,7 +334,7 @@
             </div>
           </div>
         </div>
-        <Support :divs="divs" class="d-none d-md-block"></Support>
+        <Support @goTo="goTo" :divs="divs" class="d-none d-md-block"></Support>
       </div>
     </transition>
   </div>
@@ -362,79 +362,124 @@ export default {
       jan: new Date(new Date().getFullYear().toString()).toISOString(),
       topRepo: null,
       finished: false,
-      progress: { value: 0, name: "Loading" }
+      progress: { value: 0, name: "Loading" },
+      cache: {}
     };
   },
   methods: {
+    goTo(refName) {
+      const scroll =
+        this.$refs[refName].getBoundingClientRect().top +
+        window.pageYOffset -
+        20;
+      console.log(scroll);
+      window.scrollTo({
+        top: scroll,
+        behavior: "smooth"
+      });
+    },
+    saveCache(name) {
+      console.log("saving cache");
+      localStorage.git_cache = JSON.stringify(this.cache); // this autosaves
+      localStorage["git_cache_" + name] = new Date().toISOString();
+    },
+    fetchAllPages(name, url, cb, returnDone = false, all = [], index = 0) {
+      if (this.cache[name]) {
+        if (
+          new Date() - new Date(localStorage["git_cache_" + name]) <
+          3600000
+        ) {
+          console.log("using cache!");
+          return cb(this.cache[name]);
+        }
+      }
+      this.$auth.ctx.$axios.get(url(index)).then(({ data }) => {
+        if (!returnDone) {
+          all = [...all, ...data];
+        }
+        if (!returnDone && data.length >= 100) {
+          return this.fetchAllPages(name, url, cb, all, index + 1);
+        } else {
+          const returnType = returnDone ? data : all;
+          this.cache[name] = returnType;
+          this.saveCache(name);
+          return cb(returnType);
+        }
+      });
+    },
     fetchAllRepos(cb, index = 0) {
-      this.$auth.ctx.$axios
-        .get(
-          `https://api.github.com/user/repos?per_page=100&page=${index}&since=${this.jan}`
-        )
-        .then(repos => {
-          this.repos = [...this.repos, ...repos.data];
-          if (repos.data.length >= 100) {
-            return this.fetchAllRepos(cb, index + 1);
-          } else {
-            return cb();
-          }
-        });
+      this.fetchAllPages(
+        "repos",
+        index =>
+          `https://api.github.com/user/repos?per_page=100&page=${index}&since=${this.jan}`,
+        repos => {
+          this.repos = repos;
+          cb();
+        }
+      );
     },
     fetchAllFollowers(cb, index = 0) {
-      this.$auth.ctx.$axios
-        .get(`https://api.github.com/user/followers?per_page=100&page=${index}`)
-        .then(followers => {
-          this.followers = [...this.followers, ...followers.data];
-          if (followers.data.length >= 100) {
-            return this.fetchAllFollowers(cb, index + 1);
-          } else {
-            return cb();
-          }
-        });
+      this.fetchAllPages(
+        "followers",
+        index =>
+          `https://api.github.com/user/followers?per_page=100&page=${index}`,
+        followers => {
+          this.followers = followers;
+          cb();
+        }
+      );
     },
     fetchAllFollowing(cb, index = 0) {
-      this.$auth.ctx.$axios
-        .get(`https://api.github.com/user/following?per_page=100&page=${index}`)
-        .then(following => {
-          this.following = [...this.following, ...following.data];
-          if (following.data.length >= 100) {
-            return this.fetchAllFollowing(cb, index + 1);
-          } else {
-            return cb();
-          }
-        });
+      this.fetchAllPages(
+        "following",
+        index =>
+          `https://api.github.com/user/following?per_page=100&page=${index}`,
+        following => {
+          this.following = following;
+          cb();
+        }
+      );
     },
     fetchAllLanguages(cb, index = 0) {
       const repo = this.repos[index];
       if (!repo) return cb();
       this.progress.value =
         this.progress.start + (index / this.repos.length) * 10;
-      this.$auth.ctx.$axios.get(repo.languages_url).then(languages => {
-        const all = Object.entries(languages.data).map(x => ({
-          name: x[0],
-          value: x[1]
-        }));
-        const lines = all.reduce((prev, curr) => (prev += curr.value), 0);
-        const mapped = all.map(x => ({
-          name: x.name,
-          lines: x.value,
-          perc: Math.round((x.value / lines) * 100)
-        }));
-        this.repos[index].languages = mapped;
-        this.fetchAllLanguages(cb, index + 1);
-      });
+      this.fetchAllPages(
+        "languages-" + repo.id,
+        ind => repo.languages_url,
+        languages => {
+          const all = Object.entries(languages).map(x => ({
+            name: x[0],
+            value: x[1]
+          }));
+          const lines = all.reduce((prev, curr) => (prev += curr.value), 0);
+          const mapped = all.map(x => ({
+            name: x.name,
+            lines: x.value,
+            perc: Math.round((x.value / lines) * 100)
+          }));
+          this.repos[index].languages = mapped;
+          this.fetchAllLanguages(cb, index + 1);
+        },
+        true
+      );
     },
     fetchAllCommits(cb, page = 0, index = 0, all = []) {
       const repo = this.repos[index];
       if (!repo) return cb();
       this.progress.value =
         this.progress.start + (index / this.repos.length) * 10;
-      this.$auth.ctx.$axios
-        .get(`${repo.url}/stats/contributors`)
-        .then(info => {
-          const contributions = info.data.find(
-            x => x.author.id == this.user.id
-          );
+
+      // this.fetc
+      // this.$auth.ctx.$axios
+      //   .get(`${repo.url}/stats/contributors`)
+      //   .then(info => {
+      this.fetchAllPages(
+        "commits-" + repo.id,
+        ind => `${repo.url}/stats/contributors`,
+        info => {
+          const contributions = info.find(x => x.author.id == this.user.id);
           contributions.weeks = contributions.weeks.filter(
             x => new Date(x.w * 1000).getFullYear() == new Date().getFullYear()
           );
@@ -454,39 +499,33 @@ export default {
             c: adc.c
           };
           this.fetchAllCommits(cb, 0, index + 1, []);
-        })
-        .catch(err => {
-          this.repos[index].contributions = {};
-          this.fetchAllCommits(cb, 0, index + 1, []);
-        });
+        },
+        true
+      );
     },
     fetchAllStars(cb, index = 0) {
-      this.$auth.ctx.$axios
-        .get(`https://api.github.com/user/starred?per_page=100&page=${index}`)
-        .then(stars => {
-          this.stars = [...this.stars, ...stars.data];
-          if (stars.data.length >= 100) {
-            this.fetchAllStars(cb, index + 1);
-          } else {
-            cb();
-          }
-        });
+      this.fetchAllPages(
+        "stars",
+        index =>
+          `https://api.github.com/user/starred?per_page=100&page=${index}`,
+        stars => {
+          this.stars = stars;
+          cb();
+        }
+      );
     },
     fetchAllWatches(cb, index = 0) {
-      this.$auth.ctx.$axios
-        .get(
-          `https://api.github.com/user/subscriptions?per_page=100&page=${index}`
-        )
-        .then(watches => {
-          this.watches = [...this.watches, ...watches.data];
-          if (watches.data.length >= 100) {
-            this.fetchAllWatches(cb, index + 1);
-          } else {
-            cb();
-          }
-        });
+      this.fetchAllPages(
+        "watches",
+        index =>
+          `https://api.github.com/user/subscriptions?per_page=100&page=${index}`,
+        watches => {
+          this.watches = watches;
+          cb();
+        }
+      );
     },
-    fetchAllPulls(cb, index = 0, page = 0) {
+    fetchAllPulls(cb, index = 0) {
       const repo = this.repos[index];
       if (!repo) {
         this.repos = this.repos.filter(
@@ -496,24 +535,22 @@ export default {
       }
       this.progress.value =
         this.progress.start + (index / this.repos.length) * 10;
-      this.$auth.ctx.$axios
-        .get(
+
+      this.fetchAllPages(
+        "pulls-" + repo.id,
+        ind =>
           `${repo.pulls_url
             .split("{/number}")
-            .join("")}?per_page=100&page=${page}&owner=${
+            .join("")}?per_page=100&page=${ind}&owner=${
             this.user.login
-          }&state=all`
-        )
-        .then(pulls => {
-          this.pulls = [...this.pulls, ...pulls.data];
-          if (pulls.data.length >= 100) {
-            this.fetchAllPulls(cb, index, page + 1);
-          } else {
-            this.fetchAllPulls(cb, index + 1);
-          }
-        });
+          }&state=all`,
+        pulls => {
+          this.pulls = [...this.pulls, ...pulls];
+          this.fetchAllPulls(cb, index + 1);
+        }
+      );
     },
-    fetchAllIssues(cb, index = 0, page = 0) {
+    fetchAllIssues(cb, index = 0) {
       const repo = this.repos[index];
       if (!repo) {
         this.issues = this.issues.filter(
@@ -523,22 +560,35 @@ export default {
       }
       this.progress.value =
         this.progress.start + (index / this.repos.length) * 10;
-      this.$auth.ctx.$axios
-        .get(
+      this.fetchAllPages(
+        "issues-" + repo.id,
+        ind =>
           `${repo.issues_url
             .split("{/number}")
-            .join("")}?per_page=100&page=${page}&owner=${
+            .join("")}?per_page=100&page=${ind}&owner=${
             this.user.login
-          }&state=all`
-        )
-        .then(issues => {
-          this.issues = [...this.issues, ...issues.data];
-          if (issues.data.length >= 100) {
-            this.fetchAllIssues(cb, index, page + 1);
-          } else {
-            this.fetchAllIssues(cb, index + 1);
-          }
-        });
+          }&state=all`,
+        issues => {
+          this.issues = [...this.issues, ...issues];
+          this.fetchAllIssues(cb, index + 1);
+        }
+      );
+      // this.$auth.ctx.$axios
+      //   .get(
+      //     `${repo.issues_url
+      //       .split("{/number}")
+      //       .join("")}?per_page=100&page=${page}&owner=${
+      //       this.user.login
+      //     }&state=all`
+      //   )
+      //   .then(issues => {
+      //     this.issues = [...this.issues, ...issues.data];
+      //     if (issues.data.length >= 100) {
+      //       this.fetchAllIssues(cb, index, page + 1);
+      //     } else {
+      //       this.fetchAllIssues(cb, index + 1);
+      //     }
+      //   });
     },
     formatBytes(bytes, decimals = 2) {
       if (bytes === 0) return "0 Bytes";
@@ -598,7 +648,10 @@ export default {
     }
   },
   mounted() {
-    console.log(this.user);
+    const cache = localStorage.git_cache
+      ? JSON.parse(localStorage.git_cache)
+      : {};
+    this.cache = cache;
     this.progress = { value: 0, name: "Repos" };
     this.fetchAllRepos(() => {
       this.progress = { start: 10, value: 10, name: "Languages" };
@@ -682,11 +735,17 @@ table.table {
 thead th {
   border-top: none !important;
 }
+.text-text * {
+  color: var(--text);
+}
 b {
   color: var(--accent-light);
 }
 .icon {
   font-size: 20px;
+}
+.sticky-top {
+  top: 20px !important;
 }
 .box {
   background: var(--box-bg);

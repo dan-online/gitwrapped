@@ -1,18 +1,7 @@
 <template>
   <div>
     <nav class="navbar">
-      <a class="navbar-brand" href="#">GitWrapped</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <nuxt-link to="/" class="navbar-brand title">GitWrapped</nuxt-link>
 
       <div class="my-auto custom-control custom-switch">
         <input
@@ -85,5 +74,9 @@ export default {
 .custom-control-input:checked ~ .custom-control-label::before {
   border-color: #3500d3 !important;
   background-color: #3500d3 !important;
+}
+.navbar-brand {
+  color: var(--text) !important;
+  font-size: 25px !important;
 }
 </style>
