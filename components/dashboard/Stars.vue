@@ -1,5 +1,5 @@
 <template>
-  <div class="row box p-4 mt-4 no-gutters">
+  <div class="row box p-4 mt-4 no-gutters starsme">
     <div class="col-md-6 pr-3">
       <StarsCarousel :rows="[...stars, ...watches]"></StarsCarousel>
     </div>
@@ -21,4 +21,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.toprint .starsme {
+  display: none !important;
+}
+</style>

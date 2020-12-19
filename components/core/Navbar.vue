@@ -71,6 +71,9 @@ export default {
 </script>
 
 <style>
+.toprint .navbar {
+  display: none;
+}
 .custom-control-input:checked ~ .custom-control-label::before {
   border-color: #3500d3 !important;
   background-color: #3500d3 !important;

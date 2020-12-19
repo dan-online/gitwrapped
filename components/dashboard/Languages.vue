@@ -64,7 +64,7 @@
         :user="user"
       ></LanguagesImage>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 p-3 pt-4">
       <LanguagesChart :languages="languages.slice(0, 5)"></LanguagesChart>
     </div>
   </div>
