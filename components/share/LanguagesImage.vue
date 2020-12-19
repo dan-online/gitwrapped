@@ -71,11 +71,8 @@ export default {
           canvas.width / 2,
           330
         );
-
         const chartImg = await this.downloadImage(chart.toDataURL());
         ctx.drawImage(chartImg, canvas.width / 2 - 371 / 2, 400, 371, 371);
-        chart.width = oldWidth;
-        chart.height = oldHeight;
         const pfp = await this.downloadImage(this.user.avatar_url);
         ctx.beginPath();
         ctx.arc(160, 165, 100, 0, Math.PI * 2, true);
