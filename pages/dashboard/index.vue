@@ -363,7 +363,6 @@ export default {
     }
   },
   mounted() {
-    this.user.name = this.user.name || this.user.login;
     const cache = localStorage.git_cache
       ? JSON.parse(localStorage.git_cache)
       : {};

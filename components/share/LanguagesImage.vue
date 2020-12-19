@@ -56,7 +56,7 @@ export default {
         ctx.drawImage(background, 0, 0);
         ctx.font = "50px JetBrains Mono";
         ctx.fillStyle = "#5b2ce6";
-        ctx.fillText(this.user.name, 293, 110);
+        ctx.fillText(this.user.name || this.user.login, 293, 110);
         ctx.font = "13px JetBrains Mono";
         ctx.fillStyle = "white";
         ctx.fillText("Generated " + new Date().toLocaleDateString(), 19, 785);
@@ -90,7 +90,10 @@ export default {
         this.downloadFile("2020-languages-" + new Date().toISOString(), id);
       });
     },
-    wrap(text = " ", lineLength) {
+    wrap(text, lineLength) {
+      if(!text) {
+        return []; 
+      }
       const splut = text.split(" ");
       let finalText = [""];
       splut.forEach(t => {
