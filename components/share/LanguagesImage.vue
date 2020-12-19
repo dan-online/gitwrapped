@@ -10,7 +10,7 @@
       height="810"
       width="810"
       :ref="c.id"
-      style="/*display:none*/"
+      style="display:none"
     ></canvas>
   </div>
 </template>
@@ -27,9 +27,17 @@ export default {
     };
   },
   methods: {
+    downloadFile(name, id) {
+      var link = document.createElement("a");
+      link.download = name + ".png";
+      link.href = this.$refs[id][0].toDataURL();
+      console.log(link);
+      link.click();
+    },
     async downloadImage(src) {
       const img = new Image();
       img.src = src;
+      img.setAttribute("crossorigin", "anonymous");
       return new Promise((res, rej) => {
         img.onload = () => {
           res(img);
@@ -79,6 +87,9 @@ export default {
         ctx.closePath();
         ctx.clip();
         ctx.drawImage(pfp, 60, 65, 200, 200);
+        this.finished = true;
+        this.loading = false;
+        this.downloadFile("2020-languages-" + new Date().toISOString(), id);
       });
     },
     wrap(text, lineLength) {
