@@ -9,6 +9,7 @@
           v-for="link in links"
           :key="link.name"
           :href="link.url()"
+          @click.prevent="link.button"
           target="_blank"
           class="d-flex mt-2"
           :title="'Share on ' + link.name"
@@ -39,6 +40,7 @@
 </template>
 
 <script>
+const html2canvas = () => import("html2canvas");
 export default {
   data() {
     const desc =
@@ -99,6 +101,22 @@ export default {
           icon: ["fa", "envelope-square"],
           url: () =>
             "mailto:?subject=Check out " + url + "&body=" + desc + " " + url
+        },
+        {
+          name: "Report",
+          icon: ["fa", "download"],
+          url: () => "#download",
+          button: () => {
+            document.body.classList.add("toprint");
+            html2canvas().then(h =>
+              h
+                .default(document.body, { allowTaint: true })
+                .then(function(canvas) {
+                  document.body.classList.remove("toprint");
+                  // document.body.appendChild(canvas);
+                })
+            );
+          }
         }
       ]
     };
