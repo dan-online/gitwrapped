@@ -210,6 +210,9 @@ export default {
               };
             }
           }
+          if (!this.repos[index].contributions) {
+            this.repos[index].contributions = { total: 0, a: 0, d: 0, c: 0 };
+          }
           this.fetchAllCommits(cb, 0, index + 1, []);
         },
         true
