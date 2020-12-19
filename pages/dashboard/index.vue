@@ -385,9 +385,6 @@ export default {
         this.progress = { start: 30, value: 30, name: "Commits" };
         this.fetchAllCommits(() => {
           this.progress = { start: 40, value: 40, name: "Stars" };
-          // this.topRepo = this.repos.sort(
-          //   (a, b) => b.contributions.c - a.contributions.c
-          // )[0];
           this.fetchAllStars(() => {
             this.progress = { start: 50, value: 50, name: "Watches" };
             this.fetchAllWatches(() => {
