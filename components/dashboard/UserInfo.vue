@@ -5,7 +5,7 @@
       style="height:100px;"
       :src="user.avatar_url"
     />
-    <h2 class="mt-2 mb-1">{{ user.name }}</h2>
+    <h2 class="mt-2 mb-1">{{ user.name || user.login }}</h2>
     <span
       ><b>{{ user.followers }}</b> followers,
       <b>{{ user.following }} following</b></span
