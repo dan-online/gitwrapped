@@ -2,17 +2,21 @@
   <div>
     <nav class="navbar">
       <nuxt-link to="/" class="navbar-brand title">GitWrapped</nuxt-link>
-
-      <div class="my-auto custom-control custom-switch">
-        <input
-          ref="switch"
-          :value="on"
-          @input="input"
-          type="checkbox"
-          class="custom-control-input"
-          id="customSwitch1"
-        />
-        <label class="custom-control-label" for="customSwitch1"></label>
+      <div class="my-auto d-flex">
+        <div class="custom-control custom-switch pt-3 mr-3">
+          <input
+            ref="switch"
+            :value="on"
+            @input="input"
+            type="checkbox"
+            class="custom-control-input"
+            id="customSwitch1"
+          />
+          <label class="custom-control-label" for="customSwitch1"></label>
+        </div>
+        <button @click="logInOut">
+          <span v-if="user">Logout</span><span v-else>Login</span>
+        </button>
       </div>
     </nav>
   </div>
@@ -20,6 +24,11 @@
 
 <script>
 export default {
+  computed: {
+    user() {
+      return this.$store.state.auth.user;
+    }
+  },
   data() {
     return {
       on: false,
@@ -48,6 +57,10 @@ export default {
     }
   },
   methods: {
+    logInOut() {
+      if (this.user) return this.$auth.logout();
+      else this.$auth.loginWith("github");
+    },
     input(e) {
       this.on = !this.on;
       if (this.on) {
