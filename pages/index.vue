@@ -13,7 +13,7 @@
           Login with Github
         </button>
         <nuxt-link class="button-me" to="/dashboard" v-else
-          >Dashboard of {{ user.name }}</nuxt-link
+          >Dashboard of {{ user.name || user.login }}</nuxt-link
         >
         <button @click="$auth.logout()">Logout</button>
       </div>
