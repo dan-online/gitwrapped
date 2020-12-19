@@ -31,7 +31,6 @@ export default {
       var link = document.createElement("a");
       link.download = name + ".png";
       link.href = this.$refs[id][0].toDataURL();
-      console.log(link);
       link.click();
     },
     async downloadImage(src) {
@@ -51,7 +50,6 @@ export default {
       const chart = document.querySelector("#languages canvas");
       this.canvas.push({ id });
       this.$nextTick(async () => {
-        console.log(this.user);
         const canvas = this.$refs[id][0];
         const ctx = canvas.getContext("2d");
         const background = await this.downloadImage(this.bg);
@@ -94,7 +92,6 @@ export default {
     },
     wrap(text, lineLength) {
       const splut = text.split(" ");
-      console.log(splut);
       let finalText = [""];
       splut.forEach(t => {
         finalText[finalText.length - 1] += t + " ";
@@ -102,7 +99,6 @@ export default {
           finalText.push("");
         }
       });
-      console.log(finalText);
       return finalText;
     }
   }
