@@ -12,7 +12,10 @@
     <transition name="fade-home">
       <div class="row pt-5 pb-5" v-if="finished">
         <Support class="d-md-none"></Support>
-        <Share class="mt-4 mt-md-0"></Share>
+        <div class="mt-4 mt-md-0">
+          <Share></Share>
+          <button @click="$auth.logout()">Logout</button>
+        </div>
         <div class="col-md-7">
           <div class="container">
             <div class="row">

@@ -15,7 +15,6 @@
         <nuxt-link class="button-me" to="/dashboard" v-else
           >Dashboard of {{ user.name || user.login }}</nuxt-link
         >
-        <button @click="$auth.logout()">Logout</button>
       </div>
     </div>
     <!-- <div>
@@ -56,6 +55,11 @@ export default Vue.extend({
   },
   mounted() {
     // console.log(this.$auth);
+  }, 
+  middleware({store, redirect}) {
+    if(store.state.auth.user) {
+      return redirect('/dashboard'); 
+    }
   }
 });
 </script>
