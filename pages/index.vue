@@ -1,14 +1,14 @@
 <template>
   <div class="container pt-5">
     <div class="row mt-5">
-      <div class="col-md-6">
+      <div class="col-md-7 box" id ="hero">
         <h1>GitWrapped</h1>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut rutrum
-          vehicula accumsan. Maecenas ornare iaculis augue, a ullamcorper turpis
-          rhoncus eget. Vivamus lobortis eu metus sed venenatis. Nulla nulla
-          felis, auctor eget justo ut, sollicitudin luctus velit.
-        </p>
+        <pre>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut rutrum
+vehicula accumsan. Maecenas ornare iaculis augue, a ullamcorper turpis
+rhoncus eget. Vivamus lobortis eu metus sed venenatis. Nulla nulla
+felis, auctor eget justo ut, sollicitudin luctus velit.
+        </pre>
         <button v-if="!user" @click="$auth.loginWith('github')">
           Login with Github
         </button>
@@ -86,4 +86,17 @@ export default Vue.extend({
 .links {
   padding-top: 15px;
 }
+
+#hero {
+  background-color:var(--box-bg) !important;
+}
+pre { 
+	margin: 20px; padding: 20px; 
+	color: #aaa; background-color: #222;
+	white-space: pre; text-shadow: 0 1px 0 #000;
+	border-radius: 15px; border-bottom: 1px solid #555;
+	box-shadow: 0 1px 5px rgba(0,0,0,0.4) inset, 0 0 20px rgba(0,0,0,0.2) inset;
+	font: 16px/24px 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+	}
+
 </style>
