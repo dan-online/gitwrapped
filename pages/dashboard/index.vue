@@ -186,7 +186,7 @@ export default {
         "commits-" + repo.id,
         ind => `${repo.url}/stats/contributors`,
         info => {
-          if (info) {
+          if (info && info.find) {
             const contributions = info.find(x => x.author.id == this.user.id);
             if (contributions) {
               contributions.weeks = contributions.weeks.filter(
