@@ -1,14 +1,27 @@
 <template>
-  <div class="container pt-5">
-    <div class="row mt-5">
-      <div class="col-md-7 box" id ="hero">
+  <div class="container pt-5 all">
+    <div class="row mt-5 mx-5">
+      <div class="col-md-8">
+        <img src="../assets/images/promo-1.png" class="img-fluid" />
+      </div>
+      <div class="col-md-4 box" id="hero">
         <h1>GitWrapped</h1>
-        <pre>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut rutrum
-vehicula accumsan. Maecenas ornare iaculis augue, a ullamcorper turpis
-rhoncus eget. Vivamus lobortis eu metus sed venenatis. Nulla nulla
-felis, auctor eget justo ut, sollicitudin luctus velit.
-        </pre>
+        <p>
+          Hey there and welcome to GitWrapped. This website allows you to view
+          the statistics of your Github profile this year, the amount of lines
+          you wrote, how many pull requests you closed and more! Compare stats
+          with your friends and show off on social media with our widgets!
+        </p>
+        <!-- <pre>
+         <code lang="js">
+          <span class="var">const</span> GitWrapped <span class="eq">= new</span> <span class="func">Website</span>();
+          <span class="var">const</span> githubProfile <span class="eq">=</span> GitWrapped.<span class="func">get</span>(user);
+          githubProfile.<span class="func">getAllInfo</span>().<span class="func">then</span>(() <span class="eq">=></span> {
+            createDashboard();
+            // Check out your GitWrapped profile by logging in!
+          })
+         </code>
+        </pre> -->
         <button v-if="!user" @click="$auth.loginWith('github')">
           Login with Github
         </button>
@@ -55,16 +68,20 @@ export default Vue.extend({
   },
   mounted() {
     // console.log(this.$auth);
-  }, 
-  middleware({store, redirect}) {
-    if(store.state.auth.user) {
-      return redirect('/dashboard'); 
+  },
+  middleware({ store, redirect }) {
+    if (store.state.auth.user) {
+      return redirect("/dashboard");
     }
   }
 });
 </script>
 
 <style>
+.all {
+  max-width: 100%;
+  width: 100%;
+}
 .title {
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -86,17 +103,31 @@ export default Vue.extend({
 .links {
   padding-top: 15px;
 }
-
-#hero {
-  background-color:var(--box-bg) !important;
+code {
+  color: var(--accent-light) !important;
 }
-pre { 
-	margin: 20px; padding: 20px; 
-	color: #aaa; background-color: #222;
-	white-space: pre; text-shadow: 0 1px 0 #000;
-	border-radius: 15px; border-bottom: 1px solid #555;
-	box-shadow: 0 1px 5px rgba(0,0,0,0.4) inset, 0 0 20px rgba(0,0,0,0.2) inset;
-	font: 16px/24px 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
-	}
-
+.var,
+.eq {
+  color: #f9b5f1;
+}
+.func {
+  color: #e0da30;
+}
+#hero {
+  background-color: var(--box-bg) !important;
+}
+pre {
+  margin: 20px;
+  padding: 20px;
+  color: #aaa;
+  background-color: #222;
+  white-space: pre;
+  text-shadow: 0 1px 0 #000;
+  border-radius: 15px;
+  border-bottom: 1px solid #555;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4) inset,
+    0 0 20px rgba(0, 0, 0, 0.2) inset;
+  font: 16px/24px "Courier New", Courier, "Lucida Sans Typewriter",
+    "Lucida Typewriter", monospace;
+}
 </style>

@@ -362,6 +362,7 @@ export default {
       );
     }
   },
+  middleware: "auth",
   mounted() {
     const cache = localStorage.git_cache
       ? JSON.parse(localStorage.git_cache)

@@ -58,8 +58,10 @@ export default {
   },
   methods: {
     logInOut() {
-      if (this.user) return this.$auth.logout();
-      else this.$auth.loginWith("github");
+      if (this.user) {
+        this.$auth.logout();
+        return this.$router.push("/?loggedout");
+      } else this.$auth.loginWith("github");
     },
     input(e) {
       this.on = !this.on;

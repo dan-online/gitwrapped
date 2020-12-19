@@ -12,7 +12,8 @@ export default {
   auth: {
     redirect: {
       callback: "/auth/welcome",
-      logout: "/auth/logout"
+      logout: "/auth/logout",
+      login: "/"
     },
     strategies: {
       github: {
