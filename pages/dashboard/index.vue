@@ -187,24 +187,27 @@ export default {
         ind => `${repo.url}/stats/contributors`,
         info => {
           const contributions = info.find(x => x.author.id == this.user.id);
-          contributions.weeks = contributions.weeks.filter(
-            x => new Date(x.w * 1000).getFullYear() == new Date().getFullYear()
-          );
-          const adc = contributions.weeks.reduce(
-            (prev, curr) => {
-              prev.a += curr.a;
-              prev.d += curr.d;
-              prev.c += curr.c;
-              return prev;
-            },
-            { a: 0, d: 0, c: 0 }
-          );
-          this.repos[index].contributions = {
-            total: contributions.total,
-            a: adc.a,
-            d: adc.d,
-            c: adc.c
-          };
+          if (contributions) {
+            contributions.weeks = contributions.weeks.filter(
+              x =>
+                new Date(x.w * 1000).getFullYear() == new Date().getFullYear()
+            );
+            const adc = contributions.weeks.reduce(
+              (prev, curr) => {
+                prev.a += curr.a;
+                prev.d += curr.d;
+                prev.c += curr.c;
+                return prev;
+              },
+              { a: 0, d: 0, c: 0 }
+            );
+            this.repos[index].contributions = {
+              total: contributions.total,
+              a: adc.a,
+              d: adc.d,
+              c: adc.c
+            };
+          }
           this.fetchAllCommits(cb, 0, index + 1, []);
         },
         true
