@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-2 mb-4 mb-md-0">
+  <div class="col-md-2 mb-4 mb-md-0 shareme">
     <div class="sticky-top">
       <div class="box">
         <h3>Share</h3>
@@ -108,11 +108,22 @@ export default {
           url: () => "#download",
           button: () => {
             document.body.classList.add("toprint");
+            var svgElements = document.body.querySelectorAll("svg");
+            svgElements.forEach(function(item) {
+              item.setAttribute("width", item.getBoundingClientRect().width);
+              item.setAttribute("height", item.getBoundingClientRect().height);
+              item.style.width = null;
+              item.style.height = null;
+            });
             html2canvas().then(h =>
               h
-                .default(document.body, { allowTaint: true })
+                .default(document.body, { allowTaint: true, useCORS: true })
                 .then(function(canvas) {
                   document.body.classList.remove("toprint");
+                  var link = document.createElement("a");
+                  link.download = "full_report.png";
+                  link.href = canvas.toDataURL();
+                  link.click();
                   // document.body.appendChild(canvas);
                 })
             );
@@ -125,6 +136,9 @@ export default {
 </script>
 
 <style>
+.toprint .shareme {
+  display: none !important;
+}
 .shareIcon {
   color: var(--accent-light);
   font-size: 33px;

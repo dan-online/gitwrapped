@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-3" ref="Quick">
+  <div class="col-md-3 supportme" ref="Quick">
     <div class="sticky-top">
       <div class="box">
         <h3>Quick Jump</h3>
@@ -58,4 +58,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.toprint .supportme {
+  display: none !important;
+}
+</style>
