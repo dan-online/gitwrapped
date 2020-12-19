@@ -1,22 +1,29 @@
 <template>
-  <div>
-    <a
-      v-for="link in links"
-      :key="link.name"
-      :href="link.url()"
-      target="_blank"
-      class="d-flex mt-2"
-      :title="'Share on ' + link.name"
-    >
-      <font-awesome-icon
-        class="shareIcon"
-        :icon="link.icon"
-        aria-hidden="true"
-      ></font-awesome-icon>
-      <span class="ml-2 shareText">{{ link.name }}</span>
-      <span class="sr-only">Share on {{ link.name }}</span>
-    </a>
-    <!-- 
+  <div class="col-md-2 mb-4 mb-md-0">
+    <div class="sticky-top">
+      <div class="box">
+        <h3>Share</h3>
+        <hr />
+
+        <a
+          v-for="link in links"
+          :key="link.name"
+          :href="link.url()"
+          target="_blank"
+          class="d-flex mt-2"
+          :title="'Share on ' + link.name"
+        >
+          <font-awesome-icon
+            class="shareIcon ml-0 ml-md-2 ml-lg-0"
+            :icon="link.icon"
+            aria-hidden="true"
+          ></font-awesome-icon>
+          <span class="ml-2 d-block d-md-none d-lg-block shareText">{{
+            link.name
+          }}</span>
+          <span class="sr-only">Share on {{ link.name }}</span>
+        </a>
+        <!-- 
     <li>
       <a
         href="mailto:?subject=Test&body=Test:%20http%3A%2F%2Flocalhost"
@@ -26,6 +33,8 @@
         ><span class="sr-only">Send email</span></a
       >
     </li> -->
+      </div>
+    </div>
   </div>
 </template>
 

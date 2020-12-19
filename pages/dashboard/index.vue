@@ -11,330 +11,51 @@
     </transition>
     <transition name="fade-home">
       <div class="row pt-5 pb-5" v-if="finished">
-        <Support :divs="divs" class="d-md-none"></Support>
-        <div class="col-md-3">
-          <div class="sticky-top">
-            <div class="box">
-              <h3>Share</h3>
-              <hr />
-              <Share></Share>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
+        <Support class="d-md-none"></Support>
+        <Share class="mt-4 mt-md-0"></Share>
+        <div class="col-md-7">
           <div class="container">
             <div class="row">
-              <div
-                ref="Home"
-                id="Home"
-                class="col-md-12 text-center box mx-auto px-5"
-              >
-                <img
-                  class="img-fluid rounded-circle"
-                  style="height:100px;"
-                  :src="user.avatar_url"
-                />
-                <h2 class="mt-2 mb-1">{{ user.name }}</h2>
-                <span
-                  ><b>{{ user.followers }}</b> followers,
-                  <b>{{ user.following }} following</b></span
-                >
-                <p class="px-md-5 mx-md-5">{{ user.bio }}</p>
-                <a class="icon" target="_blank" :href="user.html_url">
-                  <font-awesome-icon :icon="['fab', 'github']" />
-                </a>
-                <a
-                  class="icon"
-                  target="_blank"
-                  v-if="user.blog"
-                  :href="user.blog"
-                >
-                  <font-awesome-icon :icon="['fas', 'link']" />
-                </a>
-              </div>
+              <UserInfo class="jumpTo" id="Home" :user="user"></UserInfo>
               <div class="col-md-12 mx-auto px-0 mt-4">
                 <div class="container px-0 no-gutters">
-                  <div ref="Info" id="Info" class="row box p-4 no-gutters">
-                    <div class="col-md-6">
-                      <div class="container">
-                        <div class="row pr-3">
-                          <div class="col-md-2 text-center">
-                            <b class="statIcon"
-                              ><font-awesome-icon
-                                :icon="['fas', 'users']"
-                              ></font-awesome-icon
-                            ></b>
-                          </div>
-                          <div class="col-md-10 pt-2">
-                            <h4>{{ user.followers }} followers</h4>
-                          </div>
-                        </div>
-                        <div class="row pr-3 mt-2">
-                          <div class="col-md-2 text-center">
-                            <b class="statIcon"
-                              ><font-awesome-icon
-                                :icon="['fas', 'user-plus']"
-                              ></font-awesome-icon
-                            ></b>
-                          </div>
-                          <div class="col-md-10 pt-2">
-                            <h4>{{ user.following }} following</h4>
-                          </div>
-                        </div>
-                        <div class="row pr-3 mt-2">
-                          <div class="col-md-2 text-center">
-                            <b class="statIcon"
-                              ><font-awesome-icon
-                                :icon="['fas', 'door-open']"
-                              ></font-awesome-icon
-                            ></b>
-                          </div>
-                          <div class="col-md-10 pt-2">
-                            <h4>{{ user.public_repos }} public repos</h4>
-                          </div>
-                        </div>
-                        <div class="row pr-3 mt-2">
-                          <div class="col-md-2 text-center">
-                            <b class="statIcon"
-                              ><font-awesome-icon
-                                :icon="['fas', 'save']"
-                              ></font-awesome-icon
-                            ></b>
-                          </div>
-                          <div class="col-md-10 pt-2">
-                            <h4>
-                              {{ formatBytes(user.disk_usage * 1000) }} of disk
-                              usage
-                            </h4>
-                          </div>
-                        </div>
-                        <div class="row pr-3 mt-2">
-                          <div class="col-md-2 text-center">
-                            <b class="statIcon"
-                              ><font-awesome-icon
-                                :icon="['fas', 'clock']"
-                              ></font-awesome-icon
-                            ></b>
-                          </div>
-                          <div class="col-md-10 pt-2">
-                            <h4>
-                              {{
-                                formatDuration(
-                                  (new Date() - new Date(user.created_at)) /
-                                    1000
-                                )
-                              }}
-                              with Github
-                            </h4>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-6 mt-4 mt-md-0">
-                      <h2>Info</h2>
-                      <hr />
-                      <p>
-                        People are liking what they are seeing from you, keep up
-                        the good work. Some notable followers who followed you
-                        were
-                        <b>{{
-                          followers
-                            .map(x => x.login)
-                            .slice(0, 3)
-                            .join(", ")
-                        }}</b>
-                        and of course, us!
-                      </p>
-                    </div>
-                  </div>
-                  <div
-                    ref="Languages"
+                  <Info
+                    class="jumpTo"
+                    id="Info"
+                    :user="user"
+                    :followers="followers"
+                    :formatBytes="formatBytes"
+                    :formatDuration="formatDuration"
+                  >
+                  </Info>
+                  <Languages
+                    class="jumpTo"
                     id="Languages"
-                    class="row box p-4 mt-4 no-gutters"
-                  >
-                    <div class="col-md-6 ">
-                      <h2>Top Languages</h2>
-                      <hr />
-                      <p>
-                        You wrote a total of
-                        <b>{{
-                          nFormatter(
-                            languages.reduce(
-                              (prev, curr) => (prev += curr.lines),
-                              0
-                            )
-                          )
-                        }}</b>
-                        lines of code. Your top language to write in was
-                        <b>{{ languages[0].name }}</b> with
-                        {{ nFormatter(languages[0].lines) }} lines! Let's not
-                        forget {{ languages[languages.length - 1].name }} though
-                        which you wrote a commendable
-                        {{ nFormatter(languages[languages.length - 1].lines) }}
-                        lines in. <br /><br />That's around
-                        <b>{{
-                          formatBytes(
-                            50 *
-                              languages.reduce(
-                                (prev, curr) => (prev += curr.lines),
-                                0
-                              )
-                          )
-                        }}</b>
-                        of code<br />
-                        At 20wpm that's
-                        <b>{{
-                          formatDuration(
-                            (languages.reduce(
-                              (prev, curr) => (prev += curr.lines),
-                              0
-                            ) *
-                              66) /
-                              100,
-                            true
-                          )
-                        }}</b>
-                        of continous work<br />
-                        So about
-                        <b
-                          >{{
-                            Math.round(
-                              languages.reduce(
-                                (prev, curr) => (prev += curr.lines),
-                                0
-                              ) / 365
-                            )
-                          }}
-                          lines a day</b
-                        >
-                        this year
-                      </p>
-                      <table class="table border-0">
-                        <thead>
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Lines</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr v-for="(lang, ind) in languages" :key="lang.name">
-                            <th scope="row">{{ ind + 1 }}</th>
-                            <td>{{ lang.name }}</td>
-                            <td>{{ nFormatter(lang.lines) }}</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class="col-md-6">
-                      <LanguagesChart
-                        :languages="languages.slice(0, 5)"
-                      ></LanguagesChart>
-                    </div>
-                  </div>
-                  <div
-                    ref="Stars"
+                    :languages="languages"
+                    :nFormatter="nFormatter"
+                    :formatBytes="formatBytes"
+                    :formatDuration="formatDuration"
+                    :user="user"
+                  ></Languages>
+                  <Stars
                     id="Stars"
-                    class="row box p-4 mt-4 no-gutters"
-                  >
-                    <div class="col-md-6 pr-3">
-                      <Stars :rows="[...stars, ...watches]"></Stars>
-                    </div>
-                    <div class="col-md-6">
-                      <h2>Stars/Watches</h2>
-                      <hr />
-                      <p>
-                        You starred <b>{{ stars.length }}</b> repositories, way
-                        to contribute to the community. Not only were you a star
-                        but you also kept an eye on
-                        <b>{{ watches.length }}</b> repositories!
-                      </p>
-                    </div>
-                  </div>
-                  <div
-                    ref="Radar"
+                    :stars="stars"
+                    :watches="watches"
+                    class="jumpTo"
+                  ></Stars>
+                  <Radar
                     id="Radar"
-                    class="row box p-4 mt-4 no-gutters"
-                  >
-                    <div class="col-md-6">
-                      <h2>Radar</h2>
-                      <hr />
-                      <p>
-                        You created <b>{{ pulls.length }} pull requests</b> this
-                        year and <b>{{ issues.length }} issues</b>, you are a
-                        real team player! Not only did you create these, you
-                        also
-                        <b
-                          >closed
-                          {{
-                            Math.round(
-                              ((pulls.filter(x => x.closed_at).length +
-                                issues.filter(x => x.closed_at).length) /
-                                (pulls.length + issues.length)) *
-                                100
-                            )
-                          }}%</b
-                        >
-                        of them.<br /><br />
-                        You added
-                        <b
-                          >{{
-                            repos.reduce(
-                              (prev, curr) =>
-                                (prev += curr.contributions.a || 0),
-                              0
-                            )
-                          }}
-                          lines</b
-                        ><br />But deleted
-                        <b
-                          >{{
-                            repos.reduce(
-                              (prev, curr) =>
-                                (prev += curr.contributions.d || 0),
-                              0
-                            )
-                          }}
-                          lines</b
-                        ><br />
-                        All in
-                        <b
-                          >{{
-                            repos.reduce(
-                              (prev, curr) =>
-                                (prev += curr.contributions.c || 0),
-                              0
-                            )
-                          }}
-                          commits</b
-                        >
-                      </p>
-                    </div>
-                    <div class="col-md-6">
-                      <PullsChart
-                        :pulls="pulls"
-                        :issues="issues"
-                        :commits="
-                          repos.reduce(
-                            (prev, curr) => (prev += curr.contributions.c),
-                            0
-                          )
-                        "
-                        :deletions="
-                          repos.reduce(
-                            (prev, curr) => (prev += curr.contributions.d),
-                            0
-                          )
-                        "
-                      ></PullsChart>
-                    </div>
-                  </div>
+                    class="jumpTo"
+                    :pulls="pulls"
+                    :repos="repos"
+                    :issues="issues"
+                  ></Radar>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <Support @goTo="goTo" :divs="divs" class="d-none d-md-block"></Support>
+        <Support class="d-none d-md-block"></Support>
       </div>
     </transition>
   </div>
@@ -358,28 +79,15 @@ export default {
       issues: [],
       following: [],
       followers: [],
-      divs: [],
       jan: new Date(new Date().getFullYear().toString()).toISOString(),
-      topRepo: null,
+      // topRepo: null,
       finished: false,
       progress: { value: 0, name: "Loading" },
       cache: {}
     };
   },
   methods: {
-    goTo(refName) {
-      const scroll =
-        this.$refs[refName].getBoundingClientRect().top +
-        window.pageYOffset -
-        20;
-      console.log(scroll);
-      window.scrollTo({
-        top: scroll,
-        behavior: "smooth"
-      });
-    },
     saveCache(name) {
-      console.log("saving cache");
       localStorage.git_cache = JSON.stringify(this.cache); // this autosaves
       localStorage["git_cache_" + name] = new Date().toISOString();
     },
@@ -389,7 +97,6 @@ export default {
           new Date() - new Date(localStorage["git_cache_" + name]) <
           3600000
         ) {
-          console.log("using cache!");
           return cb(this.cache[name]);
         }
       }
@@ -669,9 +376,9 @@ export default {
         this.progress = { start: 30, value: 30, name: "Commits" };
         this.fetchAllCommits(() => {
           this.progress = { start: 40, value: 40, name: "Stars" };
-          this.topRepo = this.repos.sort(
-            (a, b) => b.contributions.c - a.contributions.c
-          )[0];
+          // this.topRepo = this.repos.sort(
+          //   (a, b) => b.contributions.c - a.contributions.c
+          // )[0];
           this.fetchAllStars(() => {
             this.progress = { start: 50, value: 50, name: "Watches" };
             this.fetchAllWatches(() => {
@@ -686,12 +393,12 @@ export default {
                       this.progress = { value: 100, name: "Render" };
                       this.$nextTick(() => {
                         this.finished = true;
-                        this.$nextTick(() => {
-                          this.divs = Object.entries(this.$refs).map(x => ({
-                            name: x[0],
-                            value: x[1]
-                          }));
-                        });
+                        // this.$nextTick(() => {
+                        //   this.divs = Object.entries(this.$refs).map(x => ({
+                        //     name: x[0],
+                        //     value: x[1]
+                        //   }));
+                        // });
                       });
                     });
                   });

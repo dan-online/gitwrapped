@@ -1,5 +1,5 @@
 <template>
-  <PieChart :options="options" :data="data"></PieChart>
+  <PieChart id="languages" :options="options" :data="data"></PieChart>
 </template>
 
 <script>

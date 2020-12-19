@@ -7,10 +7,7 @@
         <ul>
           <li v-for="ref in divs" :key="ref.name">
             <b>
-              <a
-                @click.prevent="$emit('goTo', ref.name)"
-                :href="'#' + ref.name"
-              >
+              <a @click.prevent="goTo(ref.name)" :href="'#' + ref.name">
                 {{ ref.name }}
               </a>
             </b>
@@ -34,10 +31,30 @@
 
 <script>
 export default {
-  props: ["divs"]
-  // methods: {
+  data() {
+    return {
+      divs: []
+    };
+  },
+  mounted() {
+    this.$nextTick(() => {
+      const divs = Array.from(document.querySelectorAll(".jumpTo"));
+      this.divs = divs.map(x => ({ name: x.id }));
+    });
+  },
 
-  // }
+  methods: {
+    goTo(name) {
+      const scroll =
+        document.getElementById(name).getBoundingClientRect().top +
+        window.pageYOffset -
+        20;
+      window.scrollTo({
+        top: scroll,
+        behavior: "smooth"
+      });
+    }
+  }
 };
 </script>
 
