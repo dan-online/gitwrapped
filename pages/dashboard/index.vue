@@ -471,6 +471,9 @@ b {
   -moz-box-shadow: 0px 10px 80px -33px rgba(53, 0, 211, 0.55);
   box-shadow: 0px 10px 80px -33px rgba(53, 0, 211, 0.55);
 }
+.toprint .box {
+  box-shadow: none !important;
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: all 0.5s;
