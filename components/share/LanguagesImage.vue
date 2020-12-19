@@ -90,7 +90,7 @@ export default {
         this.downloadFile("2020-languages-" + new Date().toISOString(), id);
       });
     },
-    wrap(text, lineLength) {
+    wrap(text = " ", lineLength) {
       const splut = text.split(" ");
       let finalText = [""];
       splut.forEach(t => {
