@@ -65,13 +65,13 @@ export default Vue.extend({
     return {
       user: this.$store.state.auth.user
     };
-  },
-  mounted() {
-    // console.log(this.$auth);
-    if (this.$store.state.auth.user) {
-      return this.$router.push("/dashboard");
-    }
   }
+  // mounted() {
+  //   // console.log(this.$auth);
+  //   if (this.$store.state.auth.user) {
+  //     return this.$router.push("/dashboard");
+  //   }
+  // }
 });
 </script>
 

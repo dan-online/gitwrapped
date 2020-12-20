@@ -1,8 +1,9 @@
 <template>
   <div>
-    <button @click="download" :disabled="loading" v-if="!finished">
-      <span v-if="!loading">Download Report</span>
-      <span v-else>Loading..</span>
+    <button @click="download" :disabled="loading">
+      <span v-if="!loading && !finished">Download Report</span>
+      <span v-else-if="!finished">Loading..</span>
+      <span v-else>Finished in {{ finished }}</span>
     </button>
     <canvas
       v-for="c in canvas"
@@ -45,6 +46,7 @@ export default {
     },
     download() {
       if (this.loading) return;
+      const start = new Date();
       this.loading = true;
       const id = Math.random().toString();
       const chart = document.querySelector("#languages canvas");
@@ -85,9 +87,12 @@ export default {
         ctx.closePath();
         ctx.clip();
         ctx.drawImage(pfp, 60, 65, 200, 200);
-        this.finished = true;
+        this.finished = new Date() - start + "ms";
         this.loading = false;
         this.downloadFile("2020-languages-" + new Date().toISOString(), id);
+        setTimeout(() => {
+          this.finished = false;
+        }, 3000);
       });
     },
     wrap(text, w) {

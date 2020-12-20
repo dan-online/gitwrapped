@@ -12,9 +12,12 @@ export default {
   auth: {
     redirect: {
       callback: "/auth/welcome",
-      logout: "/auth/logout"
+      home: "/dashboard"
+      // logout: "/auth/logout"
       // login: "/"
     },
+    // watchLoggedIn: false,
+    rewriteRedirects: false,
     strategies: {
       github: {
         clientId: process.env.CLIENT_ID,

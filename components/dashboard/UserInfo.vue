@@ -22,6 +22,9 @@
 
 <script>
 export default {
-  props: ["user"]
+  props: ["user"],
+  mounted() {
+    console.log(this.user);
+  }
 };
 </script>

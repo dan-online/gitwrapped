@@ -31,6 +31,7 @@
                   <Languages
                     class="jumpTo"
                     id="Languages"
+                    :repos="repos"
                     :languages="languages"
                     :nFormatter="nFormatter"
                     :formatBytes="formatBytes"
@@ -50,6 +51,7 @@
                     :repos="repos"
                     :issues="issues"
                   ></Radar>
+                  <Year :repos="repos" id="Year" class="jumpTo"></Year>
                 </div>
               </div>
             </div>
@@ -156,6 +158,7 @@ export default {
         "languages-" + repo.id,
         ind => repo.languages_url,
         languages => {
+          console.log(languages);
           const all = Object.entries(languages).map(x => ({
             name: x[0],
             value: x[1]
@@ -206,7 +209,8 @@ export default {
                 total: contributions.total,
                 a: adc.a,
                 d: adc.d,
-                c: adc.c
+                c: adc.c,
+                weeks: contributions.weeks
               };
             }
           }
@@ -243,9 +247,9 @@ export default {
     fetchAllPulls(cb, index = 0) {
       const repo = this.repos[index];
       if (!repo) {
-        this.repos = this.repos.filter(
-          x => new Date(x.created_at).getFullYear() == new Date().getFullYear()
-        );
+        // this.repos = this.repos.filter(
+        //   x => new Date(x.created_at).getFullYear() == new Date().getFullYear()
+        // );
         return cb();
       }
       this.progress.value =
@@ -362,8 +366,9 @@ export default {
       );
     }
   },
+  middleware: "auth",
   mounted() {
-    if (!this.user) return this.$router.push("/");
+    // if (!this.user) return this.$router.push("/");
     const cache = localStorage.git_cache
       ? JSON.parse(localStorage.git_cache)
       : {};
@@ -371,7 +376,7 @@ export default {
     this.progress = { value: 0, name: "Repos" };
     this.fetchAllRepos(() => {
       this.progress = { start: 10, value: 10, name: "Languages" };
-      this.repos = this.repos.slice(0, 10);
+      // this.repos = this.repos.slice(0, 10);
       this.fetchAllLanguages(() => {
         this.languages = this.repos.reduce((prev, curr) => {
           curr.languages.forEach(l => {

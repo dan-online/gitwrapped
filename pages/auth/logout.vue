@@ -1,12 +1,18 @@
 <template>
-  <h1>You have been logged out!</h1>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h1>Logging out...</h1>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-  middleware({store, redirect}) {
-    return redirect("/"); 
-  }
+  // mounted() {
+  //   // return this.$router.push("/");
+  // }
 };
 </script>
 

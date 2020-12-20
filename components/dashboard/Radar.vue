@@ -35,7 +35,10 @@
         All in
         <b
           >{{
-            repos.reduce((prev, curr) => (prev += curr.contributions.c || 0), 0)
+            repos.reduce(
+              (prev, curr) => (prev += curr.contributions.total || 0),
+              0
+            )
           }}
           commits</b
         >

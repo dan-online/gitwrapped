@@ -13,7 +13,7 @@ export default {
         labels: this.languages.map(x => " " + x.name),
         datasets: [
           {
-            label: "Lines written",
+            label: "Lines of code",
             data: this.languages.map(x => x.lines),
             backgroundColor: [
               "rgb(206,151,251)",

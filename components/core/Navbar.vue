@@ -60,7 +60,7 @@ export default {
     logInOut() {
       if (this.user) {
         this.$auth.logout();
-        return this.$router.push("/?loggedout");
+        // return this.$router.push("/?loggedout");
       } else this.$auth.loginWith("github");
     },
     input(e) {
