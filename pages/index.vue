@@ -68,10 +68,8 @@ export default Vue.extend({
   },
   mounted() {
     // console.log(this.$auth);
-  },
-  middleware({ store, redirect }) {
-    if (store.state.auth.user) {
-      return redirect("/dashboard");
+    if (this.$store.state.auth.user) {
+      return this.$router.push("/dashboard");
     }
   }
 });
