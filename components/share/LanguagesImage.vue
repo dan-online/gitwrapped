@@ -91,16 +91,16 @@ export default {
       });
     },
     wrap(text, lineLength) {
-      if(!text) {
-        return []; 
+      if (!text) {
+        return [];
       }
       const splut = text.split(" ");
       let finalText = [""];
       splut.forEach(t => {
-        finalText[finalText.length - 1] += t + " ";
         if (finalText[finalText.length - 1].length >= lineLength) {
           finalText.push("");
         }
+        finalText[finalText.length - 1] += t + " ";
       });
       return finalText;
     }
