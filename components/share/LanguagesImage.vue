@@ -90,18 +90,25 @@ export default {
         this.downloadFile("2020-languages-" + new Date().toISOString(), id);
       });
     },
-    wrap(text, lineLength) {
+    wrap(text, w) {
       if (!text) {
         return [];
       }
-      const splut = text.split(" ");
-      let finalText = [""];
-      splut.forEach(t => {
-        if (finalText[finalText.length - 1].length >= lineLength) {
-          finalText.push("");
-        }
-        finalText[finalText.length - 1] += t + " ";
-      });
+      text = text.replace(
+        new RegExp(`(?![^\\n]{1,${w}}$)([^\\n]{1,${w}})\\s`, "g"),
+        "$1\n"
+      );
+      console.log(text);
+      let finalText = text.split("\n");
+      console.log(finalText);
+      // const splut = text.split(" ");
+      // let finalText = [""];
+      // splut.forEach(t => {
+      //   if (finalText[finalText.length - 1].length >= lineLength) {
+      //     finalText.push("");
+      //   }
+      //   finalText[finalText.length - 1] += t + " ";
+      // });
       return finalText;
     }
   }
