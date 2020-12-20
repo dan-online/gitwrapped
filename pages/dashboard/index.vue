@@ -362,8 +362,8 @@ export default {
       );
     }
   },
-  middleware: "auth",
   mounted() {
+    if (!this.user) return this.$router.push("/");
     const cache = localStorage.git_cache
       ? JSON.parse(localStorage.git_cache)
       : {};
