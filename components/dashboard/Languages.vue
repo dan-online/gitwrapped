@@ -50,19 +50,16 @@
 export default {
   data() {
     return {
-      lines: this.repos.reduce(
-        (prev, curr) => (prev += curr.contributions.a),
-        0
-      )
+      lines: this.contributions.a
     };
   },
   props: [
-    "repos",
     "languages",
     "nFormatter",
     "formatBytes",
     "formatDuration",
-    "user"
+    "user",
+    "contributions"
   ]
 };
 </script>

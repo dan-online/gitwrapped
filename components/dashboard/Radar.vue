@@ -20,40 +20,17 @@
         >
         of them.<br /><br />
         You added
-        <b
-          >{{
-            repos.reduce((prev, curr) => (prev += curr.contributions.a || 0), 0)
-          }}
-          lines</b
-        ><br />But deleted
-        <b
-          >{{
-            repos.reduce((prev, curr) => (prev += curr.contributions.d || 0), 0)
-          }}
-          lines</b
-        ><br />
+        <b>{{ contributions.a }} lines</b><br />But deleted
+        <b>{{ contributions.d }} lines</b><br />
         All in
-        <b
-          >{{
-            repos.reduce(
-              (prev, curr) => (prev += curr.contributions.total || 0),
-              0
-            )
-          }}
-          commits</b
-        >
+        <b>{{ contributions.c }} commits</b>
       </p>
     </div>
     <div class="col-md-6">
       <PullsChart
+        :commits="contributions.c"
         :pulls="pulls"
         :issues="issues"
-        :commits="
-          repos.reduce((prev, curr) => (prev += curr.contributions.c), 0)
-        "
-        :deletions="
-          repos.reduce((prev, curr) => (prev += curr.contributions.d), 0)
-        "
       ></PullsChart>
     </div>
   </div>
@@ -61,7 +38,7 @@
 
 <script>
 export default {
-  props: ["pulls", "issues", "repos"]
+  props: ["pulls", "issues", "repos", "contributions"]
 };
 </script>
 

@@ -31,7 +31,7 @@
                   <Languages
                     class="jumpTo"
                     id="Languages"
-                    :repos="repos"
+                    :contributions="contributions"
                     :languages="languages"
                     :nFormatter="nFormatter"
                     :formatBytes="formatBytes"
@@ -48,10 +48,15 @@
                     id="Radar"
                     class="jumpTo"
                     :pulls="pulls"
-                    :repos="repos"
+                    :contributions="contributions"
                     :issues="issues"
                   ></Radar>
-                  <Year :repos="repos" id="Year" class="jumpTo"></Year>
+                  <Year
+                    :nFormatter="nFormatter"
+                    :contributions="contributions"
+                    id="Year"
+                    class="jumpTo"
+                  ></Year>
                 </div>
               </div>
             </div>
@@ -81,6 +86,7 @@ export default {
       issues: [],
       following: [],
       followers: [],
+      contributions: { w: [], a: 0, d: 0, c: 0 },
       jan: new Date(new Date().getFullYear().toString()).toISOString(),
       // topRepo: null,
       finished: false,
@@ -89,17 +95,32 @@ export default {
     };
   },
   methods: {
-    saveCache(name) {
-      localStorage.git_cache = JSON.stringify(this.cache); // this autosaves
+    saveCache(name, data) {
+      localStorage["git_cache_" + name + "_data"] = JSON.stringify(data); // this autosaves
       localStorage["git_cache_" + name] = new Date().toISOString();
     },
-    fetchAllPages(name, url, cb, returnDone = false, all = [], index = 0) {
-      if (this.cache[name]) {
-        if (
-          new Date() - new Date(localStorage["git_cache_" + name]) <
-          3600000
-        ) {
-          return cb(this.cache[name]);
+    getCache(name) {
+      let got = localStorage["git_cache_" + name + "_data"];
+      return {
+        data: got
+          ? JSON.parse(localStorage["git_cache_" + name + "_data"])
+          : null,
+        date: got ? new Date(localStorage["git_cache_" + name]) : null
+      };
+    },
+    fetchAllPages(
+      name,
+      url,
+      cb,
+      strip = d => d,
+      returnDone = false,
+      all = [],
+      index = 0
+    ) {
+      let cached = this.getCache(name);
+      if (cached.data) {
+        if (new Date() - cached.date < 3600000) {
+          return cb(cached.data);
         }
       }
       this.$auth.ctx.$axios.get(url(index)).then(({ data }) => {
@@ -109,9 +130,9 @@ export default {
         if (!returnDone && data.length >= 100) {
           return this.fetchAllPages(name, url, cb, all, index + 1);
         } else {
-          const returnType = returnDone ? data : all;
-          this.cache[name] = returnType;
-          this.saveCache(name);
+          let returnType = returnDone ? data : all;
+          returnType = strip(returnType);
+          this.saveCache(name, returnType);
           return cb(returnType);
         }
       });
@@ -124,6 +145,17 @@ export default {
         repos => {
           this.repos = repos;
           cb();
+        },
+        repos => {
+          console.log(repos);
+          return repos.map(repo => ({
+            url: repo.url,
+            name: repo.name,
+            languages_url: repo.languages_url,
+            id: repo.id,
+            pulls_url: repo.pulls_url,
+            issues_url: repo.issues_url
+          }));
         }
       );
     },
@@ -158,7 +190,6 @@ export default {
         "languages-" + repo.id,
         ind => repo.languages_url,
         languages => {
-          console.log(languages);
           const all = Object.entries(languages).map(x => ({
             name: x[0],
             value: x[1]
@@ -172,6 +203,7 @@ export default {
           this.repos[index].languages = mapped;
           this.fetchAllLanguages(cb, index + 1);
         },
+        s => s,
         true
       );
     },
@@ -205,13 +237,27 @@ export default {
                 },
                 { a: 0, d: 0, c: 0 }
               );
-              this.repos[index].contributions = {
-                total: contributions.total,
-                a: adc.a,
-                d: adc.d,
-                c: adc.c,
-                weeks: contributions.weeks
-              };
+              this.contributions.a += adc.a;
+              this.contributions.d += adc.d;
+              this.contributions.c += adc.c;
+              contributions.weeks.forEach(w => {
+                let idx = this.contributions.w.find(x => x.w == w);
+                if (idx >= 0) {
+                  this.contributions.w[idx].a += w.a;
+                  this.contributions.w[idx].d += w.d;
+                  this.contributions.w[idx].c += w.c;
+                } else {
+                  this.contributions.w.push(w);
+                }
+              });
+              // console.log(contributions.weeks);
+              // this.repos[index].contributions = {
+              //   total: contributions.total,
+              //   a: adc.a,
+              //   d: adc.d,
+              //   c: adc.c
+              //   // weeks: contributions.weeks
+              // };
             }
           }
           if (!this.repos[index].contributions) {
@@ -219,6 +265,7 @@ export default {
           }
           this.fetchAllCommits(cb, 0, index + 1, []);
         },
+        s => s,
         true
       );
     },
@@ -266,6 +313,12 @@ export default {
         pulls => {
           this.pulls = [...this.pulls, ...pulls];
           this.fetchAllPulls(cb, index + 1);
+        },
+        pulls => {
+          return pulls.map(pull => ({
+            closed_at: pull.closed_at
+          }));
+          return pulls;
         }
       );
     },
@@ -369,10 +422,6 @@ export default {
   middleware: "auth",
   mounted() {
     // if (!this.user) return this.$router.push("/");
-    const cache = localStorage.git_cache
-      ? JSON.parse(localStorage.git_cache)
-      : {};
-    this.cache = cache;
     this.progress = { value: 0, name: "Repos" };
     this.fetchAllRepos(() => {
       this.progress = { start: 10, value: 10, name: "Languages" };
