@@ -1,10 +1,10 @@
 <template>
   <div class="container pt-5 all">
-    <div class="row mt-5 mx-5">
+    <div class="row mt-5 mx-md-5 mx-1">
       <div class="col-md-8">
         <img src="../assets/images/promo-1.png" class="img-fluid" />
       </div>
-      <div class="col-md-4 box" id="hero">
+      <div class="col-md-4 box mt-5 mt-md-0" id="hero">
         <h1>GitWrapped</h1>
         <p>
           Hey there and welcome to GitWrapped. This website allows you to view

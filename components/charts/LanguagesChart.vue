@@ -5,6 +5,7 @@
 <script>
 export default {
   data() {
+    const all = this.languages.reduce((prev, curr) => (prev += curr.lines), 0);
     return {
       options: {
         type: "pie"
@@ -14,7 +15,7 @@ export default {
         datasets: [
           {
             label: "Lines of code",
-            data: this.languages.map(x => x.lines),
+            data: this.languages.map(x => Math.round((x.lines / all) * 100)),
             backgroundColor: [
               "rgb(206,151,251)",
               "rgb(246,165,235)",

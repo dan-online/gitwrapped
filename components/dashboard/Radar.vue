@@ -20,10 +20,13 @@
         >
         of them.<br /><br />
         You added
-        <b>{{ contributions.a }} lines</b><br />But deleted
-        <b>{{ contributions.d }} lines</b><br />
+        <b>{{ nFormatter(contributions.a) }} lines</b><br />But deleted
+        <b>{{ nFormatter(contributions.d) }} lines</b><br />
         All in
-        <b>{{ contributions.c }} commits</b>
+        <b>{{ nFormatter(contributions.c) }} commits</b><br />
+        That's
+        <b>{{ nFormatter(contributions.a / contributions.c) }} lines</b> per
+        commit
       </p>
     </div>
     <div class="col-md-6">
@@ -38,7 +41,7 @@
 
 <script>
 export default {
-  props: ["pulls", "issues", "repos", "contributions"]
+  props: ["pulls", "issues", "repos", "contributions", "nFormatter"]
 };
 </script>
 

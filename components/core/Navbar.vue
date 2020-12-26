@@ -15,7 +15,8 @@
           <label class="custom-control-label" for="customSwitch1"></label>
         </div>
         <button @click="logInOut">
-          <span v-if="user">Logout</span><span v-else>Login</span>
+          <span class="var-text" v-if="user">Logout</span
+          ><span v-else>Login</span>
         </button>
       </div>
     </nav>
@@ -86,6 +87,9 @@ export default {
 </script>
 
 <style>
+.var-text {
+  color: var(--text);
+}
 .toprint .navbar {
   display: none;
 }

@@ -8,11 +8,9 @@
         <b>{{ nFormatter(lines) }}</b>
         lines of code. Your top language to write in was
         <b>{{ languages[0].name }}</b> with
-        {{ nFormatter(languages[0].lines) }} lines! Let's not forget
-        {{ languages[languages.length - 1].name }} though which your repos
-        contained a commendable
-        {{ nFormatter(languages[languages.length - 1].lines) }}
-        lines in. <br /><br />That's around
+        {{ Math.round((languages[0].lines / all) * 100) }}%! Let's not forget
+        your least written language: {{ languages[languages.length - 1].name }}.
+        <br /><br />That's around
         <b>{{ formatBytes(50 * lines) }}</b>
         of code<br />
         At 20wpm that's
@@ -22,7 +20,7 @@
         <b>{{ Math.round(lines / 365) }} lines a day</b>
         this year
       </p>
-      <table class="table border-0">
+      <!-- <table class="table border-0">
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -37,7 +35,7 @@
             <td>{{ nFormatter(lang.lines) }}</td>
           </tr>
         </tbody>
-      </table>
+      </table> -->
       <LanguagesImage :lines="nFormatter(lines)" :user="user"></LanguagesImage>
     </div>
     <div class="col-md-6 p-3 pt-4">
@@ -50,6 +48,7 @@
 export default {
   data() {
     return {
+      all: this.languages.reduce((prev, curr) => (prev += curr.lines), 0),
       lines: this.contributions.a
     };
   },

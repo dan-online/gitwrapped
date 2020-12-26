@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  props: ["user", "lines"],
+  props: ["user", "commits", "repos"],
   data() {
     return {
       finished: false,
@@ -44,43 +44,99 @@ export default {
         };
       });
     },
+    writeText(ctx, text, font, color, x, y) {
+      ctx.font = font;
+      ctx.fillStyle = color;
+      ctx.fillText(text, x, y);
+    },
     download() {
       if (this.loading) return;
       const start = new Date();
       this.loading = true;
       const id = Math.random().toString();
-      const chart = document.querySelector("#languages canvas");
+      const chart = document.querySelector("#Year canvas");
       this.canvas.push({ id });
       this.$nextTick(async () => {
         const canvas = this.$refs[id][0];
         const ctx = canvas.getContext("2d");
         const background = await this.downloadImage(this.bg);
         ctx.drawImage(background, 0, 0);
-        ctx.font = "50px JetBrains Mono";
-        ctx.fillStyle = "#5b2ce6";
-        ctx.fillText(this.user.name || this.user.login, 293, 110);
-        ctx.font = "13px JetBrains Mono";
-        ctx.fillStyle = "white";
-        ctx.fillText("Generated " + new Date().toLocaleDateString(), 19, 785);
-        ctx.font = "20px JetBrains Mono";
-        ctx.fillStyle = "#baa3ff";
-        ctx.fillText("@" + this.user.login, 297, 140);
-        ctx.font = "20px Ubuntu Mono";
-        ctx.fillStyle = "white";
+        this.writeText(
+          ctx,
+          this.user.name || this.user.login,
+          "50px JetBrains Mono",
+          "#5b2ce6",
+          293,
+          110
+        );
+        this.writeText(
+          ctx,
+          "Top Repos",
+          "35px JetBrains Mono",
+          "#5b2ce6",
+          40,
+          400
+        );
+        this.writeText(
+          ctx,
+          "Generated " + new Date().toLocaleDateString(),
+          "13px JetBrains Mono",
+          "white",
+          19,
+          785
+        );
+        this.writeText(
+          ctx,
+          "@" + this.user.login,
+          "20px JetBrains Mono",
+          "#baa3ff",
+          297,
+          140
+        );
         this.wrap(this.user.bio, 45).forEach((line, ind) => {
-          ctx.fillText(line || "", 297, 167 + 25 * ind);
+          this.writeText(
+            ctx,
+            line,
+            "20px Ubuntu Mono",
+            "white",
+            297,
+            167 + 25 * ind
+          );
         });
-        ctx.font = "30px JetBrains Mono";
-        ctx.fillStyle = "white";
+        this.repos
+          .filter(x => !x.private)
+          .sort((a, b) => b.contributions.c - a.contributions.c)
+          .slice(0, 7)
+          .map(x => {
+            let l = 21;
+            if (x.name.length > l) {
+              x.name = x.name.slice(0, l - 3) + "...";
+            }
+            return x.name;
+          })
+          .forEach((line, ind) => {
+            this.writeText(
+              ctx,
+              line,
+              "30px Ubuntu Mono",
+              "white",
+              40,
+              450 + 40 * ind
+            );
+          });
         ctx.textBaseline = "middle";
         ctx.textAlign = "center";
-        ctx.fillText(
-          "I wrote " + this.lines + " lines of code in 2020",
+        this.writeText(
+          ctx,
+          "I made " + this.commits + " commits in 2020",
+          "30px JetBrains Mono",
+          "white",
           canvas.width / 2,
-          330
+          315
         );
         const chartImg = await this.downloadImage(chart.toDataURL());
-        ctx.drawImage(chartImg, canvas.width / 2 - 371 / 2, 400, 371, 371);
+        ctx.drawImage(chartImg, canvas.width - 371 - 70, 375, 371, 371);
+        ctx.fill;
         const pfp = await this.downloadImage(this.user.avatar_url);
         ctx.beginPath();
         ctx.arc(160, 165, 100, 0, Math.PI * 2, true);
@@ -89,7 +145,7 @@ export default {
         ctx.drawImage(pfp, 60, 65, 200, 200);
         this.finished = new Date() - start + "ms";
         this.loading = false;
-        this.downloadFile("2020-languages-" + new Date().toISOString(), id);
+        this.downloadFile("2020-contributions-" + new Date().toISOString(), id);
         setTimeout(() => {
           this.finished = false;
         }, 3000);

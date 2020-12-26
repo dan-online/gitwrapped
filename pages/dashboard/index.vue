@@ -50,10 +50,13 @@
                     :pulls="pulls"
                     :contributions="contributions"
                     :issues="issues"
+                    :nFormatter="nFormatter"
                   ></Radar>
                   <Year
                     :nFormatter="nFormatter"
                     :contributions="contributions"
+                    :repos="repos"
+                    :user="user"
                     id="Year"
                     class="jumpTo"
                   ></Year>
@@ -154,7 +157,9 @@ export default {
             languages_url: repo.languages_url,
             id: repo.id,
             pulls_url: repo.pulls_url,
-            issues_url: repo.issues_url
+            issues_url: repo.issues_url,
+            owner: repo.owner,
+            private: repo.private
           }));
         }
       );
@@ -182,10 +187,11 @@ export default {
       );
     },
     fetchAllLanguages(cb, index = 0) {
-      const repo = this.repos[index];
+      let repos = this.repos.filter(x => x.owner.id == this.user.id);
+      console.log(repos.length, this.repos.length);
+      const repo = repos[index];
       if (!repo) return cb();
-      this.progress.value =
-        this.progress.start + (index / this.repos.length) * 10;
+      this.progress.value = this.progress.start + (index / repos.length) * 10;
       this.fetchAllPages(
         "languages-" + repo.id,
         ind => repo.languages_url,
@@ -200,7 +206,7 @@ export default {
             lines: x.value,
             perc: Math.round((x.value / lines) * 100)
           }));
-          this.repos[index].languages = mapped;
+          this.repos[index].languages = mapped || [];
           this.fetchAllLanguages(cb, index + 1);
         },
         s => s,
@@ -251,13 +257,13 @@ export default {
                 }
               });
               // console.log(contributions.weeks);
-              // this.repos[index].contributions = {
-              //   total: contributions.total,
-              //   a: adc.a,
-              //   d: adc.d,
-              //   c: adc.c
-              //   // weeks: contributions.weeks
-              // };
+              this.repos[index].contributions = {
+                total: contributions.total,
+                a: adc.a,
+                d: adc.d,
+                c: adc.c
+                // weeks: contributions.weeks
+              };
             }
           }
           if (!this.repos[index].contributions) {
@@ -419,20 +425,22 @@ export default {
       );
     }
   },
-  middleware: "auth",
+
   mounted() {
-    // if (!this.user) return this.$router.push("/");
+    if (!this.user) return this.$router.push("/");
     this.progress = { value: 0, name: "Repos" };
     this.fetchAllRepos(() => {
       this.progress = { start: 10, value: 10, name: "Languages" };
       // this.repos = this.repos.slice(0, 10);
       this.fetchAllLanguages(() => {
         this.languages = this.repos.reduce((prev, curr) => {
-          curr.languages.forEach(l => {
-            const idx = prev.findIndex(x => x.name == l.name);
-            if (idx >= 0) prev[idx].lines += l.lines;
-            else prev.push({ name: l.name, lines: l.lines });
-          });
+          if (curr.languages) {
+            curr.languages.forEach(l => {
+              const idx = prev.findIndex(x => x.name == l.name);
+              if (idx >= 0) prev[idx].lines += l.lines;
+              else prev.push({ name: l.name, lines: l.lines });
+            });
+          }
           return prev;
         }, []);
         this.languages.sort((a, b) => b.lines - a.lines);
