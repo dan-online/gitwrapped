@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="download" :disabled="loading">
+    <button @click="download" :disabled="loading" class="no-print">
       <span v-if="!loading && !finished">Download Image</span>
       <span v-else-if="!finished">Loading..</span>
       <span v-else>Finished in {{ finished }}</span>

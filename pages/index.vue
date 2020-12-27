@@ -1,10 +1,15 @@
 <template>
   <div class="container pt-5 all">
     <div class="row mt-5 mx-md-5 mx-1">
-      <div class="col-md-8">
-        <img src="../assets/images/promo-1.png" class="img-fluid" />
+      <div class="col-md-8 p-3 m-md-0">
+        <a v-if="!user" @click="$auth.loginWith('github')">
+          <img src="../assets/images/promo-1.png" class="img-fluid box-hero" />
+        </a>
+        <a href="/dashboard" v-else>
+          <img src="../assets/images/promo-1.png" class="img-fluid box-hero" />
+        </a>
       </div>
-      <div class="col-md-4 box mt-5 mt-md-0" id="hero">
+      <div class="col-md-4 box my-auto" id="hero">
         <h1>GitWrapped</h1>
         <p>
           Hey there and welcome to GitWrapped. This website allows you to view
@@ -14,46 +19,26 @@
         </p>
         <!-- <pre>
          <code lang="js">
-          <span class="var">const</span> GitWrapped <span class="eq">= new</span> <span class="func">Website</span>();
-          <span class="var">const</span> githubProfile <span class="eq">=</span> GitWrapped.<span class="func">get</span>(user);
-          githubProfile.<span class="func">getAllInfo</span>().<span class="func">then</span>(() <span class="eq">=></span> {
-            createDashboard();
-            // Check out your GitWrapped profile by logging in!
-          })
+<span class="var">const</span> GitWrapped <span class="eq">= new</span> <span class="func">Website</span>();
+<span class="var">const</span> githubProfile <span class="eq">=</span> GitWrapped.<span class="func">get</span>(user);
+githubProfile.<span class="func">getAllInfo</span>().<span class="func">then</span>(() <span class="eq">=></span> {
+  createDashboard();
+  // Check out your GitWrapped profile by logging in!
+})
          </code>
         </pre> -->
-        <button v-if="!user" @click="$auth.loginWith('github')">
+        <button
+          v-if="!user"
+          @click="$auth.loginWith('github')"
+          class="d-inline-block"
+        >
           Login with Github
         </button>
-        <nuxt-link class="button-me" to="/dashboard" v-else
+        <nuxt-link class="button-me d-inline-block" to="/dashboard" v-else
           >Dashboard of {{ user.name || user.login }}</nuxt-link
         >
       </div>
     </div>
-    <!-- <div>
-      <Logo />
-      <h1 class="title">
-        github-wrapped
-      </h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -113,6 +98,7 @@ code {
 }
 #hero {
   background-color: var(--box-bg) !important;
+  height: fit-content;
 }
 pre {
   margin: 20px;
@@ -127,5 +113,38 @@ pre {
     0 0 20px rgba(0, 0, 0, 0.2) inset;
   font: 16px/24px "Courier New", Courier, "Lucida Sans Typewriter",
     "Lucida Typewriter", monospace;
+}
+
+.box-hero {
+  position: relative;
+  display: inline-block;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  will-change: transform;
+}
+
+.box-hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.box-hero:hover {
+  -webkit-transform: scale(1.05, 1.05);
+  transform: scale(1.05, 1.05);
+}
+
+.box-hero:hover::after {
+  opacity: 1;
 }
 </style>

@@ -26,8 +26,14 @@
         <b>{{ nFormatter(contributions.c) }} commits</b><br />
         That's
         <b>{{ nFormatter(contributions.a / contributions.c) }} lines</b> per
-        commit
+        commit<br /><br />
       </p>
+      <!-- <div v-if="aClosedPull">
+        <p>
+          Here's a pull request you closed this year on
+          {{ aClosedPull.name }}
+        </p>
+      </div> -->
     </div>
     <div class="col-md-6">
       <PullsChart
@@ -41,6 +47,12 @@
 
 <script>
 export default {
+  // data() {
+  //   console.log(this.pulls.find(x => x.closedUse));
+  //   return {
+  //     aClosedPull: this.pulls.find(x => x.closedUse)
+  //   };
+  // },
   props: ["pulls", "issues", "repos", "contributions", "nFormatter"]
 };
 </script>

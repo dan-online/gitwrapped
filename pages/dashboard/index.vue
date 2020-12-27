@@ -72,6 +72,7 @@
 </template>
 
 <script>
+let lengths = {};
 export default {
   computed: {
     user() {
@@ -99,6 +100,8 @@ export default {
   },
   methods: {
     saveCache(name, data) {
+      if (!lengths[name.split("-")[0]]) lengths[name.split("-")[0]] = 0;
+      lengths[name.split("-")[0]] += JSON.stringify(data).length;
       localStorage["git_cache_" + name + "_data"] = JSON.stringify(data); // this autosaves
       localStorage["git_cache_" + name] = new Date().toISOString();
     },
@@ -135,7 +138,7 @@ export default {
         } else {
           let returnType = returnDone ? data : all;
           returnType = strip(returnType);
-          this.saveCache(name, returnType);
+          if (returnType) this.saveCache(name, returnType);
           return cb(returnType);
         }
       });
@@ -150,7 +153,6 @@ export default {
           cb();
         },
         repos => {
-          console.log(repos);
           return repos.map(repo => ({
             url: repo.url,
             name: repo.name,
@@ -188,7 +190,6 @@ export default {
     },
     fetchAllLanguages(cb, index = 0) {
       let repos = this.repos.filter(x => x.owner.id == this.user.id);
-      console.log(repos.length, this.repos.length);
       const repo = repos[index];
       if (!repo) return cb();
       this.progress.value = this.progress.start + (index / repos.length) * 10;
@@ -227,51 +228,57 @@ export default {
         "commits-" + repo.id,
         ind => `${repo.url}/stats/contributors`,
         info => {
-          if (info && info.find) {
-            const contributions = info.find(x => x.author.id == this.user.id);
-            if (contributions) {
-              contributions.weeks = contributions.weeks.filter(
+          if (info && info.weeks) {
+            const adc = info.weeks.reduce(
+              (prev, curr) => {
+                prev.a += curr.a;
+                prev.d += curr.d;
+                prev.c += curr.c;
+                return prev;
+              },
+              { a: 0, d: 0, c: 0 }
+            );
+            this.contributions.a += adc.a;
+            this.contributions.d += adc.d;
+            this.contributions.c += adc.c;
+            info.weeks.forEach(w => {
+              let idx = this.contributions.w.find(x => x.w == w);
+              if (idx >= 0) {
+                this.contributions.w[idx].a += w.a;
+                this.contributions.w[idx].d += w.d;
+                this.contributions.w[idx].c += w.c;
+              } else {
+                this.contributions.w.push(w);
+              }
+            });
+            this.repos[index].contributions = {
+              total: info.total,
+              a: adc.a,
+              d: adc.d,
+              c: adc.c
+            };
+          } else {
+            this.repos[index].contributions = { total: 0, a: 0, d: 0, c: 0 };
+          }
+          // console.log(this.repos[index]);
+          this.fetchAllCommits(cb, 0, index + 1, []);
+        },
+        s => {
+          if (s && s.find) {
+            s = s.find(x => x.author.id == this.user.id);
+            if (s && s.weeks) {
+              s.weeks = s.weeks.filter(
                 x =>
                   new Date(x.w * 1000).getFullYear() == new Date().getFullYear()
               );
-              const adc = contributions.weeks.reduce(
-                (prev, curr) => {
-                  prev.a += curr.a;
-                  prev.d += curr.d;
-                  prev.c += curr.c;
-                  return prev;
-                },
-                { a: 0, d: 0, c: 0 }
-              );
-              this.contributions.a += adc.a;
-              this.contributions.d += adc.d;
-              this.contributions.c += adc.c;
-              contributions.weeks.forEach(w => {
-                let idx = this.contributions.w.find(x => x.w == w);
-                if (idx >= 0) {
-                  this.contributions.w[idx].a += w.a;
-                  this.contributions.w[idx].d += w.d;
-                  this.contributions.w[idx].c += w.c;
-                } else {
-                  this.contributions.w.push(w);
-                }
-              });
-              // console.log(contributions.weeks);
-              this.repos[index].contributions = {
-                total: contributions.total,
-                a: adc.a,
-                d: adc.d,
-                c: adc.c
-                // weeks: contributions.weeks
-              };
             }
           }
-          if (!this.repos[index].contributions) {
-            this.repos[index].contributions = { total: 0, a: 0, d: 0, c: 0 };
+          if (s) {
+            return s;
+          } else {
+            return null;
           }
-          this.fetchAllCommits(cb, 0, index + 1, []);
         },
-        s => s,
         true
       );
     },
@@ -303,6 +310,9 @@ export default {
         // this.repos = this.repos.filter(
         //   x => new Date(x.created_at).getFullYear() == new Date().getFullYear()
         // );
+        let idx = this.pulls.findIndex(x => x.closed_at);
+        console.log(this.pulls);
+        if (idx >= 0) this.pulls[idx].closedUse = true;
         return cb();
       }
       this.progress.value =
@@ -321,10 +331,20 @@ export default {
           this.fetchAllPulls(cb, index + 1);
         },
         pulls => {
-          return pulls.map(pull => ({
-            closed_at: pull.closed_at
+          // let idx = pulls.findIndex(x => x.closed_at);
+          // if (!this.pulls.find(x => x.closedUse) && idx >= 0) {
+          //   pulls[idx].closedUse = true;
+          //   this.pulls.push(pulls[idx]);
+          //   console.log(pulls[idx]);
+          //   return [
+          //     ...pulls
+          //       .filter(x => x.id != pulls[idx].id)
+          //       .map(x => ({ closed_at: x.closed_at }))
+          //   ];
+          // }
+          return pulls.map(x => ({
+            closed_at: x.closed_at
           }));
-          return pulls;
         }
       );
     },
@@ -347,6 +367,8 @@ export default {
             this.user.login
           }&state=all`,
         issues => {
+          // console.log(issues);
+
           this.issues = [...this.issues, ...issues];
           this.fetchAllIssues(cb, index + 1);
         }
@@ -461,6 +483,19 @@ export default {
                       this.progress = { value: 100, name: "Render" };
                       this.$nextTick(() => {
                         this.finished = true;
+                        console.log(
+                          Object.entries(lengths).map(
+                            ([key, val]) => `${key}: ${this.nFormatter(val)}`
+                          )
+                        );
+                        console.log(
+                          (Object.entries(lengths).reduce(
+                            (prev, [key, val]) => (prev += val),
+                            0
+                          ) /
+                            5238346) *
+                            100
+                        );
                         // this.$nextTick(() => {
                         //   this.divs = Object.entries(this.$refs).map(x => ({
                         //     name: x[0],
@@ -525,6 +560,9 @@ b {
 
 .toprint .box {
   box-shadow: none !important;
+}
+.toprint .no-print {
+  display: none;
 }
 .fade-enter-active,
 .fade-leave-active {
