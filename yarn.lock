@@ -4270,6 +4270,13 @@ git-url-parse@^11.4.0:
   dependencies:
     git-up "^4.0.0"
 
+github-contributions-canvas@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/github-contributions-canvas/-/github-contributions-canvas-0.4.0.tgz#9f2a772766d5ba67ea8d90bd123882db7b5a60a6"
+  integrity sha512-DfBVS3yzzToQlO1l0TfMk9WbvKRaAauXi9lnJQb63/NuUmDrUbydc7UcYhdZt8uHyP9/CbPA8qMVYCV+fht5TA==
+  dependencies:
+    moment "^2.22.1"
+
 glob-parent@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-3.1.0.tgz#9e6af6299d8d3bd2bd40430832bd113df906c5ae"
@@ -5604,7 +5611,7 @@ mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@^0.5.3, mkdirp@~0.5.1:
   dependencies:
     minimist "^1.2.5"
 
-moment@^2.10.2:
+moment@^2.10.2, moment@^2.22.1:
   version "2.29.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
   integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==

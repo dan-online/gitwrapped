@@ -75,7 +75,10 @@ export default {
         ctx.textBaseline = "middle";
         ctx.textAlign = "center";
         ctx.fillText(
-          "I wrote " + this.lines + " lines of code in 2020",
+          "I wrote " +
+            this.lines +
+            " lines of code in " +
+            new Date().getFullYear(),
           canvas.width / 2,
           330
         );

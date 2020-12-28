@@ -60,6 +60,14 @@
                     id="Year"
                     class="jumpTo"
                   ></Year>
+                  <Events
+                    :user="user"
+                    :events="events"
+                    :nFormatter="nFormatter"
+                    id="Events"
+                    class="jumpto"
+                  ></Events>
+                  <!-- <Rank id="Rank" class="jumpTo"></Rank> -->
                 </div>
               </div>
             </div>
@@ -90,6 +98,7 @@ export default {
       issues: [],
       following: [],
       followers: [],
+      events: {},
       contributions: { w: [], a: 0, d: 0, c: 0 },
       jan: new Date(new Date().getFullYear().toString()).toISOString(),
       // topRepo: null,
@@ -134,7 +143,15 @@ export default {
           all = [...all, ...data];
         }
         if (!returnDone && data.length >= 100) {
-          return this.fetchAllPages(name, url, cb, all, index + 1);
+          return this.fetchAllPages(
+            name,
+            url,
+            cb,
+            strip,
+            returnDone,
+            all,
+            index + 1
+          );
         } else {
           let returnType = returnDone ? data : all;
           returnType = strip(returnType);
@@ -276,11 +293,69 @@ export default {
           if (s) {
             return s;
           } else {
-            return null;
+            return {};
           }
         },
         true
       );
+    },
+    fetchAllEvents(cb) {
+      // this.fetchAllPages(
+      //   "events",
+      //   index =>
+      //     `https://api.github.com/users/${this.user.login}/events?per_page=100&page=${index}`,
+      //   events => {
+      //     this.events = events;
+      //     delete localStorage.git_cache_events_data;
+      //     cb();
+      //   },
+      //   events => {
+      //     const eventNames = [];
+      //     const final = {
+      //       total: events.length,
+      //       contributions: events
+      //         .filter(x => x.type == "PushEvent")
+      //         .reduce((prev, curr) => (prev += curr.payload.commits.length), 0)
+      //     };
+      //     events.forEach(e => {
+      //       if (!eventNames.find(x => x == e.type)) {
+      //         eventNames.push(e.type);
+      //       }
+      //     });
+      //     console.log(events);
+      //     console.log(eventNames);
+      //     console.log(final);
+      //     return final;
+      //   }
+      // );
+      this.$auth.ctx.$axios
+        .post("https://api.github.com/graphql", {
+          query: `query {
+            user(login: "${this.user.login}") {
+              name
+              contributionsCollection {
+                contributionCalendar {
+                  totalContributions
+                  weeks {
+                    contributionDays {
+                      color
+                      contributionCount
+                      date
+                      weekday
+                    }
+                    firstDay
+                  }
+                }
+              }
+            }
+          }`
+        })
+        .then(({ data }) => {
+          this.events =
+            data.data.user.contributionsCollection.contributionCalendar;
+          console.log(this.events);
+          cb();
+        });
     },
     fetchAllStars(cb, index = 0) {
       this.fetchAllPages(
@@ -480,28 +555,31 @@ export default {
                   this.fetchAllFollowers(() => {
                     this.progress = { start: 90, value: 90, name: "Following" };
                     this.fetchAllFollowing(() => {
-                      this.progress = { value: 100, name: "Render" };
-                      this.$nextTick(() => {
-                        this.finished = true;
-                        console.log(
-                          Object.entries(lengths).map(
-                            ([key, val]) => `${key}: ${this.nFormatter(val)}`
-                          )
-                        );
-                        console.log(
-                          (Object.entries(lengths).reduce(
-                            (prev, [key, val]) => (prev += val),
-                            0
-                          ) /
-                            5238346) *
-                            100
-                        );
-                        // this.$nextTick(() => {
-                        //   this.divs = Object.entries(this.$refs).map(x => ({
-                        //     name: x[0],
-                        //     value: x[1]
-                        //   }));
-                        // });
+                      this.progress = { value: 95, name: "Events" };
+                      this.fetchAllEvents(() => {
+                        this.progress = { value: 100, name: "Render" };
+                        this.$nextTick(() => {
+                          this.finished = true;
+                          console.log(
+                            Object.entries(lengths).map(
+                              ([key, val]) => `${key}: ${this.nFormatter(val)}`
+                            )
+                          );
+                          console.log(
+                            (Object.entries(lengths).reduce(
+                              (prev, [key, val]) => (prev += val),
+                              0
+                            ) /
+                              5238346) *
+                              100
+                          );
+                          // this.$nextTick(() => {
+                          //   this.divs = Object.entries(this.$refs).map(x => ({
+                          //     name: x[0],
+                          //     value: x[1]
+                          //   }));
+                          // });
+                        });
                       });
                     });
                   });

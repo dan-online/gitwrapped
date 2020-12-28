@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  props: ["user", "commits", "repos"],
+  props: ["user", "contributions", "bestDay"],
   data() {
     return {
       finished: false,
@@ -54,7 +54,7 @@ export default {
       const start = new Date();
       this.loading = true;
       const id = Math.random().toString();
-      const chart = document.querySelector("#Year canvas");
+      const chart = document.querySelector("#Events canvas");
       this.canvas.push({ id });
       this.$nextTick(async () => {
         const canvas = this.$refs[id][0];
@@ -68,14 +68,6 @@ export default {
           "#5b2ce6",
           293,
           110
-        );
-        this.writeText(
-          ctx,
-          "Top Repos",
-          "35px JetBrains Mono",
-          "#5b2ce6",
-          40,
-          400
         );
         this.writeText(
           ctx,
@@ -103,39 +95,64 @@ export default {
             167 + 25 * ind
           );
         });
-        this.repos
-          .filter(x => !x.private)
-          .sort((a, b) => b.contributions.c - a.contributions.c)
-          .slice(0, 7)
-          .map(x => {
-            let l = 21;
-            if (x.name.length > l) {
-              x.name = x.name.slice(0, l - 3) + "...";
-            }
-            return x.name;
-          })
-          .forEach((line, ind) => {
-            this.writeText(
-              ctx,
-              line,
-              "30px Ubuntu Mono",
-              "white",
-              40,
-              450 + 40 * ind
-            );
-          });
+        // this.repos
+        //   .filter(x => !x.private)
+        //   .sort((a, b) => b.contributions.c - a.contributions.c)
+        //   .slice(0, 7)
+        //   .map(x => {
+        //     let l = 21;
+        //     if (x.name.length > l) {
+        //       x.name = x.name.slice(0, l - 3) + "...";
+        //     }
+        //     return x.name;
+        //   })
+        //   .forEach((line, ind) => {
+        //     this.writeText(
+        //       ctx,
+        //       line,
+        //       "30px Ubuntu Mono",
+        //       "white",
+        //       40,
+        //       450 + 40 * ind
+        //     );
+        //   });
         ctx.textBaseline = "middle";
         ctx.textAlign = "center";
         this.writeText(
           ctx,
-          "I made " + this.commits + " commits in " + new Date().getFullYear(),
+          "I made " +
+            this.contributions +
+            " contributions in " +
+            new Date().getFullYear(),
           "30px JetBrains Mono",
           "white",
           canvas.width / 2,
           315
         );
+        this.writeText(
+          ctx,
+          "My best day was on " + this.bestDay.date,
+          "30px JetBrains Mono",
+          "white",
+          canvas.width / 2,
+          655
+        );
+        this.writeText(
+          ctx,
+          "with " + this.bestDay.count + " contributions",
+          "30px JetBrains Mono",
+          "white",
+          canvas.width / 2,
+          700
+        );
         const chartImg = await this.downloadImage(chart.toDataURL());
-        ctx.drawImage(chartImg, canvas.width - 371 - 70, 375, 371, 371);
+        ctx.drawImage(
+          chartImg,
+          canvas.width - chart.width - 70,
+          375,
+          chart.width,
+          chart.height
+        );
         const pfp = await this.downloadImage(this.user.avatar_url);
         ctx.beginPath();
         ctx.arc(160, 165, 100, 0, Math.PI * 2, true);
@@ -144,7 +161,7 @@ export default {
         ctx.drawImage(pfp, 60, 65, 200, 200);
         this.finished = new Date() - start + "ms";
         this.loading = false;
-        this.downloadFile("2020-contributions-" + new Date().toISOString(), id);
+        this.downloadFile("2020-events-" + new Date().toISOString(), id);
         setTimeout(() => {
           this.finished = false;
         }, 3000);
