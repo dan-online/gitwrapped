@@ -123,7 +123,7 @@ export default {
           "I made " +
             this.contributions +
             " contributions in " +
-            new Date().getFullYear(),
+            (new Date().getFullYear() - 1),
           "30px JetBrains Mono",
           "white",
           canvas.width / 2,

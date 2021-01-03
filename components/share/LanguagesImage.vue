@@ -78,7 +78,7 @@ export default {
           "I wrote " +
             this.lines +
             " lines of code in " +
-            new Date().getFullYear(),
+            (new Date().getFullYear() - 1),
           canvas.width / 2,
           330
         );

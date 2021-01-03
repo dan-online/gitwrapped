@@ -12,8 +12,8 @@
       <h2>Contributions</h2>
       <hr />
       <p>
-        In {{ new Date().getFullYear() }} you contributed to many repos but your
-        top repository was <b>{{ topRepo.name }}</b> with
+        In {{ new Date().getFullYear() - 1 }} you contributed to many repos but
+        your top repository was <b>{{ topRepo.name }}</b> with
         <b>{{ nFormatter(topRepo.contributions.a) }} additions</b> and
         <b>{{ topRepo.contributions.c }}</b> commits. <br /><br />Your top week
         to commit was of {{ new Date(topCWeek.w * 1000).toDateString() }} with

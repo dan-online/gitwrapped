@@ -128,7 +128,10 @@ export default {
         ctx.textAlign = "center";
         this.writeText(
           ctx,
-          "I made " + this.commits + " commits in " + new Date().getFullYear(),
+          "I made " +
+            this.commits +
+            " commits in " +
+            (new Date().getFullYear() - 1),
           "30px JetBrains Mono",
           "white",
           canvas.width / 2,

@@ -100,7 +100,7 @@ export default {
       followers: [],
       events: {},
       contributions: { w: [], a: 0, d: 0, c: 0 },
-      jan: new Date(new Date().getFullYear().toString()).toISOString(),
+      jan: new Date((new Date().getFullYear() - 1).toString()).toISOString(),
       // topRepo: null,
       finished: false,
       progress: { value: 0, name: "Loading" },
@@ -286,7 +286,8 @@ export default {
             if (s && s.weeks) {
               s.weeks = s.weeks.filter(
                 x =>
-                  new Date(x.w * 1000).getFullYear() == new Date().getFullYear()
+                  new Date(x.w * 1000).getFullYear() ==
+                  new Date().getFullYear() - 1
               );
             }
           }
@@ -328,12 +329,18 @@ export default {
       //     return final;
       //   }
       // );
+      const start = new Date((new Date().getFullYear() - 1).toString());
+      start.setMonth(0);
+      const end = new Date((new Date().getFullYear() - 1).toString());
+      end.setMonth(11);
+      end.setDate(31);
+      console.log(start, end);
       this.$auth.ctx.$axios
         .post("https://api.github.com/graphql", {
           query: `query {
             user(login: "${this.user.login}") {
               name
-              contributionsCollection {
+              contributionsCollection(from: "${start.toISOString()}", to: "${end.toISOString()}") {
                 contributionCalendar {
                   totalContributions
                   weeks {
@@ -383,7 +390,7 @@ export default {
       const repo = this.repos[index];
       if (!repo) {
         // this.repos = this.repos.filter(
-        //   x => new Date(x.created_at).getFullYear() == new Date().getFullYear()
+        //   x => new Date(x.created_at).getFullYear() - 1 == (new Date().getFullYear() - 1)
         // );
         let idx = this.pulls.findIndex(x => x.closed_at);
         console.log(this.pulls);
@@ -427,7 +434,9 @@ export default {
       const repo = this.repos[index];
       if (!repo) {
         this.issues = this.issues.filter(
-          x => new Date(x.created_at).getFullYear() == new Date().getFullYear()
+          x =>
+            new Date(x.created_at).getFullYear() - 1 ==
+            new Date().getFullYear() - 1
         );
         return cb();
       }
