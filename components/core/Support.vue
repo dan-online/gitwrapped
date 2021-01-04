@@ -13,6 +13,12 @@
             </b>
           </li>
         </ul>
+        <h3>Year</h3>
+        <p>
+          The currently chosen year is: <b>{{ year }}</b>
+        </p>
+        <input type="number" min="1970" step="1" v-model="newYear" />
+        <button @click="openYear">Go</button>
       </div>
       <div class="mt-4 box">
         <h3>Support</h3>
@@ -31,9 +37,11 @@
 
 <script>
 export default {
+  props: ["year"],
   data() {
     return {
-      divs: []
+      divs: [],
+      newYear: parseInt(this.year)
     };
   },
   mounted() {
@@ -44,6 +52,9 @@ export default {
   },
 
   methods: {
+    openYear() {
+      this.$router.push("/dashboard/" + this.newYear);
+    },
     goTo(name) {
       const scroll =
         document.getElementById(name).getBoundingClientRect().top +
@@ -61,5 +72,14 @@ export default {
 <style>
 .toprint .supportme {
   display: none !important;
+}
+input {
+  border: 3px solid #3500d3;
+  border: 3px solid var(--accent);
+  background: none;
+  color: white;
+  font-size: 20px;
+  padding: 10px;
+  transition: 0.3s all;
 }
 </style>
