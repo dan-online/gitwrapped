@@ -200,7 +200,7 @@ export default {
         index =>
           `https://api.github.com/user/repos?per_page=100&page=${index}&since=${since.toISOString()}&before=${before.toISOString()}`,
         repos => {
-          console.log(repos);
+          // console.log(repos);
           this.repos = repos;
           cb();
         },
@@ -286,6 +286,7 @@ export default {
       // this.$auth.ctx.$axios
       //   .get(`${repo.url}/stats/contributors`)
       //   .then(info => {
+      console.log(`${repo.url}/stats/contributors`);
       this.fetchAllPages(
         "commits-" + repo.id,
         ind => `${repo.url}/stats/contributors`,
@@ -322,7 +323,6 @@ export default {
           } else {
             this.repos[index].contributions = { total: 0, a: 0, d: 0, c: 0 };
           }
-          // console.log(this.repos[index]);
           this.fetchAllCommits(cb, 0, index + 1, []);
         },
         s => {
@@ -437,7 +437,6 @@ export default {
         //   x => new Date(x.created_at).getFullYear() - 1 == (new Date().getFullYear() - 1)
         // );
         let idx = this.pulls.findIndex(x => x.closed_at);
-        console.log(this.pulls);
         if (idx >= 0) this.pulls[idx].closedUse = true;
         return cb();
       }
@@ -619,19 +618,19 @@ export default {
                         this.progress = { value: 100, name: "Render" };
                         this.$nextTick(() => {
                           this.finished = true;
-                          console.log(
-                            Object.entries(lengths).map(
-                              ([key, val]) => `${key}: ${this.nFormatter(val)}`
-                            )
-                          );
-                          console.log(
-                            (Object.entries(lengths).reduce(
-                              (prev, [key, val]) => (prev += val),
-                              0
-                            ) /
-                              5238346) *
-                              100
-                          );
+                          // console.log(
+                          //   Object.entries(lengths).map(
+                          //     ([key, val]) => `${key}: ${this.nFormatter(val)}`
+                          //   )
+                          // );
+                          // console.log(
+                          //   (Object.entries(lengths).reduce(
+                          //     (prev, [key, val]) => (prev += val),
+                          //     0
+                          //   ) /
+                          //     5238346) *
+                          //     100
+                          // );
                           // this.$nextTick(() => {
                           //   this.divs = Object.entries(this.$refs).map(x => ({
                           //     name: x[0],
