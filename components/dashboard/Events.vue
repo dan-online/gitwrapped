@@ -13,6 +13,7 @@
     <div class="col-md-8 text-center">
       <ContributionsChart :user="user" :data="data"></ContributionsChart>
       <EventsShare
+        :year="year"
         :user="user"
         :bestDay="bestDay"
         :contributions="nFormatter(events.totalContributions)"
@@ -23,7 +24,7 @@
 
 <script>
 export default {
-  props: ["user", "events", "nFormatter"],
+  props: ["user", "events", "nFormatter", "year"],
   data() {
     let lastDay = this.events.weeks[this.events.weeks.length - 1]
       .contributionDays[

@@ -12,8 +12,8 @@
       <h2>Contributions</h2>
       <hr />
       <p>
-        In {{ new Date().getFullYear() - 1 }} you contributed to many repos but
-        your top repository was <b>{{ topRepo.name }}</b> with
+        In {{ year }} you contributed to many repos but your top repository was
+        <b>{{ topRepo.name }}</b> with
         <b>{{ nFormatter(topRepo.contributions.a) }} additions</b> and
         <b>{{ topRepo.contributions.c }}</b> commits. <br /><br />Your top week
         to commit was of {{ new Date(topCWeek.w * 1000).toDateString() }} with
@@ -30,6 +30,7 @@
         :repos="repos"
         :commits="nFormatter(contributions.c)"
         :user="user"
+        :year="year"
       ></YearImage>
     </div>
   </div>
@@ -37,7 +38,7 @@
 
 <script>
 export default {
-  props: ["contributions", "nFormatter", "repos", "user"],
+  props: ["contributions", "nFormatter", "repos", "user", "year"],
   methods: {
     toggleLog() {
       this.chart.options.scales.yAxes[0].type = this.log

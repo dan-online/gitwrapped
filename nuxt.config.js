@@ -9,6 +9,10 @@ export default {
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
   },
+  loading: {
+    color: "var(--#3500d3)",
+    height: "5px"
+  },
   auth: {
     redirect: {
       callback: "/auth/welcome",

@@ -1,6 +1,6 @@
 <template>
   <div class="row box p-4 mt-4 no-gutters">
-    <div class="col-md-6 ">
+    <div class="col-md-6">
       <h2>Top Languages</h2>
       <hr />
       <p>
@@ -18,7 +18,6 @@
         of continous work<br />
         So about
         <b>{{ Math.round(lines / 365) }} lines a day</b>
-        this year
       </p>
       <!-- <table class="table border-0">
         <thead>
@@ -36,7 +35,11 @@
           </tr>
         </tbody>
       </table> -->
-      <LanguagesImage :lines="nFormatter(lines)" :user="user"></LanguagesImage>
+      <LanguagesImage
+        :year="year"
+        :lines="nFormatter(lines)"
+        :user="user"
+      ></LanguagesImage>
     </div>
     <div class="col-md-6 p-3 pt-4">
       <LanguagesChart :languages="languages.slice(0, 5)"></LanguagesChart>
@@ -58,7 +61,8 @@ export default {
     "formatBytes",
     "formatDuration",
     "user",
-    "contributions"
+    "contributions",
+    "year"
   ]
 };
 </script>

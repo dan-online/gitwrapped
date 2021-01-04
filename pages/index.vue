@@ -13,9 +13,9 @@
         <h1>GitWrapped</h1>
         <p>
           Hey there and welcome to GitWrapped. This website allows you to view
-          the statistics of your Github profile this year, the amount of lines
-          you wrote, how many pull requests you closed and more! Compare stats
-          with your friends and show off on social media with our widgets!
+          the statistics of your Github profile over the years, the amount of
+          lines you wrote, how many pull requests you closed and more! Compare
+          stats with your friends and show off on social media with our widgets!
         </p>
         <!-- <pre>
          <code lang="js">

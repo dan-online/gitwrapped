@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  props: ["user", "contributions", "bestDay"],
+  props: ["user", "contributions", "bestDay", "year"],
   data() {
     return {
       finished: false,
@@ -120,10 +120,7 @@ export default {
         ctx.textAlign = "center";
         this.writeText(
           ctx,
-          "I made " +
-            this.contributions +
-            " contributions in " +
-            (new Date().getFullYear() - 1),
+          "I made " + this.contributions + " contributions in " + this.year,
           "30px JetBrains Mono",
           "white",
           canvas.width / 2,
@@ -161,7 +158,10 @@ export default {
         ctx.drawImage(pfp, 60, 65, 200, 200);
         this.finished = new Date() - start + "ms";
         this.loading = false;
-        this.downloadFile("2020-events-" + new Date().toISOString(), id);
+        this.downloadFile(
+          this.year + "-events-" + new Date().toISOString(),
+          id
+        );
         setTimeout(() => {
           this.finished = false;
         }, 3000);

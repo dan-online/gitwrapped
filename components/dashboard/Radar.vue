@@ -4,7 +4,7 @@
       <h2>Radar</h2>
       <hr />
       <p>
-        You created <b>{{ pulls.length }} pull requests</b> this year and
+        You created <b>{{ pulls.length }} pull requests</b> in {{ year }} and
         <b>{{ issues.length }} issues</b>, you are a real team player! Not only
         did you create these, you also
         <b
@@ -53,7 +53,7 @@ export default {
   //     aClosedPull: this.pulls.find(x => x.closedUse)
   //   };
   // },
-  props: ["pulls", "issues", "repos", "contributions", "nFormatter"]
+  props: ["pulls", "issues", "repos", "contributions", "nFormatter", "year"]
 };
 </script>
 

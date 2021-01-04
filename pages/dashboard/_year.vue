@@ -29,6 +29,7 @@
                   >
                   </Info>
                   <Languages
+                    v-if="languages.length > 0"
                     class="jumpTo"
                     id="Languages"
                     :contributions="contributions"
@@ -41,6 +42,7 @@
                   <Stars
                     id="Stars"
                     :stars="stars"
+                    :v-if="stars.length + watches.length > 0"
                     :watches="watches"
                     class="jumpTo"
                   ></Stars>
@@ -48,11 +50,15 @@
                     id="Radar"
                     class="jumpTo"
                     :pulls="pulls"
+                    :year="year"
                     :contributions="contributions"
                     :issues="issues"
                     :nFormatter="nFormatter"
+                    v-if="contributions.w.length > 0"
                   ></Radar>
                   <Year
+                    v-if="contributions.w.length > 0"
+                    :year="year"
                     :nFormatter="nFormatter"
                     :contributions="contributions"
                     :repos="repos"
@@ -61,6 +67,7 @@
                     class="jumpTo"
                   ></Year>
                   <Events
+                    :year="year"
                     :user="user"
                     :events="events"
                     :nFormatter="nFormatter"
@@ -88,6 +95,17 @@ export default {
     }
   },
   data() {
+    const year = this.$route.params.year;
+    let jan;
+    let dec;
+    if (year) {
+      jan = new Date(year);
+      dec = new Date(year);
+      jan.setMonth(0);
+      dec.setMonth(11);
+      jan.setDate(1);
+      dec.setDate(31);
+    }
     return {
       repos: [],
       issues: [],
@@ -100,11 +118,13 @@ export default {
       followers: [],
       events: {},
       contributions: { w: [], a: 0, d: 0, c: 0 },
-      jan: new Date((new Date().getFullYear() - 1).toString()).toISOString(),
+      jan,
+      dec,
       // topRepo: null,
       finished: false,
       progress: { value: 0, name: "Loading" },
-      cache: {}
+      cache: {},
+      year
     };
   },
   methods: {
@@ -113,6 +133,13 @@ export default {
       lengths[name.split("-")[0]] += JSON.stringify(data).length;
       localStorage["git_cache_" + name + "_data"] = JSON.stringify(data); // this autosaves
       localStorage["git_cache_" + name] = new Date().toISOString();
+    },
+    clearCache() {
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith("git_cache")) {
+          delete localStorage[key];
+        }
+      });
     },
     getCache(name) {
       let got = localStorage["git_cache_" + name + "_data"];
@@ -160,12 +187,15 @@ export default {
         }
       });
     },
-    fetchAllRepos(cb, index = 0) {
+    fetchAllRepos(cb) {
+      const since = this.jan;
+      const before = this.dec;
       this.fetchAllPages(
         "repos",
         index =>
-          `https://api.github.com/user/repos?per_page=100&page=${index}&since=${this.jan}`,
+          `https://api.github.com/user/repos?per_page=100&page=${index}&since=${since.toISOString()}&before=${before.toISOString()}`,
         repos => {
+          console.log(repos);
           this.repos = repos;
           cb();
         },
@@ -225,6 +255,16 @@ export default {
             perc: Math.round((x.value / lines) * 100)
           }));
           this.repos[index].languages = mapped || [];
+          this.languages = this.repos.reduce((prev, curr) => {
+            if (curr.languages) {
+              curr.languages.forEach(l => {
+                const idx = prev.findIndex(x => x.name == l.name);
+                if (idx >= 0) prev[idx].lines += l.lines;
+                else prev.push({ name: l.name, lines: l.lines });
+              });
+            }
+            return prev;
+          }, []);
           this.fetchAllLanguages(cb, index + 1);
         },
         s => s,
@@ -285,9 +325,7 @@ export default {
             s = s.find(x => x.author.id == this.user.id);
             if (s && s.weeks) {
               s.weeks = s.weeks.filter(
-                x =>
-                  new Date(x.w * 1000).getFullYear() ==
-                  new Date().getFullYear() - 1
+                x => new Date(x.w * 1000).getFullYear().toString() == this.year
               );
             }
           }
@@ -329,11 +367,8 @@ export default {
       //     return final;
       //   }
       // );
-      const start = new Date((new Date().getFullYear() - 1).toString());
-      start.setMonth(0);
-      const end = new Date((new Date().getFullYear() - 1).toString());
-      end.setMonth(11);
-      end.setDate(31);
+      const start = this.jan;
+      const end = this.dec;
       console.log(start, end);
       this.$auth.ctx.$axios
         .post("https://api.github.com/graphql", {
@@ -434,9 +469,7 @@ export default {
       const repo = this.repos[index];
       if (!repo) {
         this.issues = this.issues.filter(
-          x =>
-            new Date(x.created_at).getFullYear() - 1 ==
-            new Date().getFullYear() - 1
+          x => new Date(x.created_at).getFullYear() == this.year
         );
         return cb();
       }
@@ -505,50 +538,58 @@ export default {
       return (num / si[i].value).toFixed(1).replace(rx, "$1") + si[i].symbol;
     },
     formatDuration(secs, extra) {
+      secs = Math.round(secs);
       if (secs < 60) {
         return secs + " seconds";
       }
       let mins = Math.round(secs / 60);
       if (mins < 60) {
         return (
-          mins + " minutes" + (extra ? " and " + (secs % 60) + " seconds " : "")
+          mins +
+          " minutes" +
+          (extra ? " and " + Math.round(secs % 60) + " seconds " : "")
         );
       }
       let hrs = Math.round(mins / 60);
       if (hrs < 24) {
         return (
-          hrs + " hours" + (extra ? " and " + (mins % 60) + " minutes " : "")
+          hrs +
+          " hours" +
+          (extra ? " and " + Math.round(mins % 60) + " minutes " : "")
         );
       }
       let days = Math.round(hrs / 24);
       if (days < 365) {
-        return days + " days" + (extra ? " and " + (hrs % 24) + " hours " : "");
+        return (
+          days +
+          " days" +
+          (extra ? " and " + Math.round(hrs % 24) + " hours " : "")
+        );
       }
       return (
         Math.round(days / 365) +
         " years" +
-        (extra ? " and " + (days % 365) + " days " : "")
+        (extra ? " and " + Math.round(days % 365) + " days " : "")
       );
     }
   },
 
   mounted() {
     if (!this.user) return this.$router.push("/");
+    if (!this.year) {
+      return this.$router.push(
+        "/dashboard/" + (new Date().getFullYear() - 1).toString()
+      );
+    }
+    if (!localStorage.lastYear || localStorage.lastYear != this.year) {
+      this.clearCache();
+      localStorage.lastYear = this.year;
+    }
     this.progress = { value: 0, name: "Repos" };
     this.fetchAllRepos(() => {
       this.progress = { start: 10, value: 10, name: "Languages" };
       // this.repos = this.repos.slice(0, 10);
       this.fetchAllLanguages(() => {
-        this.languages = this.repos.reduce((prev, curr) => {
-          if (curr.languages) {
-            curr.languages.forEach(l => {
-              const idx = prev.findIndex(x => x.name == l.name);
-              if (idx >= 0) prev[idx].lines += l.lines;
-              else prev.push({ name: l.name, lines: l.lines });
-            });
-          }
-          return prev;
-        }, []);
         this.languages.sort((a, b) => b.lines - a.lines);
         this.progress = { start: 30, value: 30, name: "Commits" };
         this.fetchAllCommits(() => {

@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  props: ["user", "lines"],
+  props: ["user", "lines", "year"],
   data() {
     return {
       finished: false,
@@ -75,10 +75,7 @@ export default {
         ctx.textBaseline = "middle";
         ctx.textAlign = "center";
         ctx.fillText(
-          "I wrote " +
-            this.lines +
-            " lines of code in " +
-            (new Date().getFullYear() - 1),
+          "I wrote " + this.lines + " lines of code in " + this.year,
           canvas.width / 2,
           330
         );
@@ -92,7 +89,10 @@ export default {
         ctx.drawImage(pfp, 60, 65, 200, 200);
         this.finished = new Date() - start + "ms";
         this.loading = false;
-        this.downloadFile("2020-languages-" + new Date().toISOString(), id);
+        this.downloadFile(
+          this.year + "-languages-" + new Date().toISOString(),
+          id
+        );
         setTimeout(() => {
           this.finished = false;
         }, 3000);
