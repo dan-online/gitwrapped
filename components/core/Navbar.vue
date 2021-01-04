@@ -2,8 +2,9 @@
   <div>
     <nav class="navbar">
       <nuxt-link to="/" class="navbar-brand title">
-        <img src="../../static/logo.png" class="img-fluid navLogo"
-      /></nuxt-link>
+        <img src="../../static/logo.png" class="img-fluid navLogo" />
+        <span class="d-none d-md-block">GitWrapped</span></nuxt-link
+      >
       <div class="my-auto d-flex">
         <div class="custom-control custom-switch pt-3 mr-3">
           <input
@@ -105,8 +106,8 @@ export default {
 }
 .navLogo {
   height: 60px;
-  background: var(--accent);
-  padding: 5px;
+  /* background: var(--accent); */
+  /* padding: 5px; */
   border-radius: 5px;
 }
 </style>
