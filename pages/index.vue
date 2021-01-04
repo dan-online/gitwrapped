@@ -50,6 +50,11 @@ export default Vue.extend({
     return {
       user: this.$store.state.auth.user
     };
+  },
+  head() {
+    return {
+      title: "GitWrapped - Home"
+    };
   }
   // mounted() {
   //   // console.log(this.$auth);

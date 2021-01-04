@@ -14,10 +14,17 @@
           </li>
         </ul>
         <h3>Year</h3>
+        <hr />
         <p>
           The currently chosen year is: <b>{{ year }}</b>
         </p>
-        <input type="number" min="1970" step="1" v-model="newYear" />
+        <input
+          type="number"
+          min="1970"
+          :max="new Date().getFullYear()"
+          step="1"
+          v-model="newYear"
+        />
         <button @click="openYear">Go</button>
       </div>
       <div class="mt-4 box">

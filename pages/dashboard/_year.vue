@@ -94,6 +94,11 @@ export default {
       return this.$store.state.auth.user;
     }
   },
+  head() {
+    return {
+      title: "GitWrapped - Dashboard"
+    };
+  },
   data() {
     const year = this.$route.params.year;
     let jan;
@@ -369,7 +374,11 @@ export default {
       // );
       const start = this.jan;
       const end = this.dec;
-      console.log(start, end);
+      let gotCache = this.getCache("events");
+      if (gotCache.data && new Date() - gotCache.date < 3600000) {
+        this.events = gotCache.data;
+        return cb();
+      }
       this.$auth.ctx.$axios
         .post("https://api.github.com/graphql", {
           query: `query {
@@ -395,7 +404,7 @@ export default {
         .then(({ data }) => {
           this.events =
             data.data.user.contributionsCollection.contributionCalendar;
-          console.log(this.events);
+          this.saveCache("events", this.events);
           cb();
         });
     },
