@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
-    "@fortawesome/vue-fontawesome": "^2.0.0",
+    "@fortawesome/vue-fontawesome": "^2.0.2",
     "@nuxt/typescript-runtime": "^2.0.0",
     "@nuxtjs/auth-next": "^5.0.0-1608461079.ae1e5db",
     "@nuxtjs/axios": "^5.12.2",
