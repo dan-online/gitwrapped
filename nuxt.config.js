@@ -7,11 +7,52 @@ export default {
   head: {
     title: "GitWrapped",
     meta: [
-      { charset: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { hid: "description", name: "description", content: "" }
+      { name: "title", content: "GitWrapped - Home" },
+      {
+        name: "description",
+        content:
+          "Hey there and welcome to GitWrapped. This website allows you to view the statistics of your Github profile over the years, the amount of lines you wrote, how many pull requests you closed and more! Compare stats with your friends and show off on social media with our widgets!"
+      },
+
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://gitwrapped.dev" },
+      { property: "og:title", content: "GitWrapped - Home" },
+      {
+        property: "og:description",
+        content:
+          "Hey there and welcome to GitWrapped. This website allows you to view the statistics of your Github profile over the years, the amount of lines you wrote, how many pull requests you closed and more! Compare stats with your friends and show off on social media with our widgets!"
+      },
+      {
+        property: "og:image",
+        content: "/logo.png"
+      },
+
+      { property: "twitter:card", content: "summary_large_image" },
+      { property: "twitter:url", content: "https://gitwrapped.dev" },
+      { property: "twitter:title", content: "GitWrapped - Home" },
+      {
+        property: "twitter:description",
+        content:
+          "Hey there and welcome to GitWrapped. This website allows you to view the statistics of your Github profile over the years, the amount of lines you wrote, how many pull requests you closed and more! Compare stats with your friends and show off on social media with our widgets!"
+      },
+      {
+        property: "twitter:image",
+        content: "/logo.png"
+      }
+
+      // { charset: "utf-8" },
+      // { name: "viewport", content: "width=device-width, initial-scale=1" },
+      // {
+      //   hid: "description",
+      //   name: "description",
+      //   content:
+      //     "Hey there and welcome to GitWrapped. This website allows you to view the statistics of your Github profile over the years, the amount of lines you wrote, how many pull requests you closed and more! Compare stats with your friends and show off on social media with our widgets!"
+      // }
     ],
-    link: [{ rel: "icon", type: "image/png", href: "/logo.png" }]
+    link: [
+      { rel: "icon", type: "image/png", href: "/logo.png" },
+      { rel: "shortcut icon", type: "image/png", href: "/logo.png" }
+    ]
   },
   loading: {
     color: "var(--#3500d3)",
