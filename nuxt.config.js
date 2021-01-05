@@ -1,5 +1,9 @@
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
+  server: {
+    port: process.env.NODE_ENV == "production" ? 4000 : 3000,
+    host: process.env.NODE_ENV == "production" ? "gitwrapped.dev" : "localhost"
+  },
   head: {
     title: "GitWrapped",
     meta: [
