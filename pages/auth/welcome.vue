@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container pb-5">
     <div class="row">
       <div class="col" v-if="!err">
         <span v-if="!user">Please wait while we setup a few things...</span>
