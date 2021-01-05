@@ -17,7 +17,7 @@
     "@nuxtjs/fontawesome": "^1.1.2",
     "@nuxtjs/sentry": "^4.5.0",
     "@types/express-session": "^1.17.3",
-    "@types/passport": "^1.0.4",
+    "@types/passport": "^1.0.5",
     "@types/passport-github2": "^1.2.4",
     "bootstrap": "^4.5.2",
     "bootstrap-vue": "^2.21.0",
