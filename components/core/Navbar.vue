@@ -83,7 +83,7 @@ export default {
       vars.forEach(v => {
         document.documentElement.style.setProperty(v.name, v.val);
       });
-      console.log(vars);
+      // console.log(vars);
     }
   }
 };
@@ -101,7 +101,7 @@ export default {
   background-color: #3500d3 !important;
 }
 .navbar-brand {
-  text-decoration: none;
+  text-decoration: none !important;
   color: var(--text) !important;
   font-size: 25px !important;
 }

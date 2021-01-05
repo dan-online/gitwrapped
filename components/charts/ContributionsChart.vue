@@ -9,7 +9,7 @@ const c = () => import("github-contributions-canvas");
 export default {
   props: ["data", "user"],
   mounted() {
-    console.log(this.data);
+    // console.log(this.data);
     c().then(d =>
       d.drawContributions(this.$refs.canvas, {
         data: this.data,

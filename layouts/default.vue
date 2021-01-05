@@ -48,7 +48,7 @@ body {
   color: white;
   font-family: "Ubuntu Mono", monospace;
 }
-a {
+a:not(.button-me) {
   color: var(--accent-light) !important;
   text-decoration: underline;
 }

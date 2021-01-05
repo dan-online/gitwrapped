@@ -245,11 +245,11 @@ export default {
       let repos = this.repos;
       const repo = repos[index];
       if (!repo) {
-        console.log(
-          this.repos
-            .map(x => x.name + ":" + x.languages.map(x => x.name))
-            .join("\n")
-        );
+        // console.log(
+        //   this.repos
+        //     .map(x => x.name + ":" + x.languages.map(x => x.name))
+        //     .join("\n")
+        // );
         return cb();
       }
       this.progress.value = this.progress.start + (index / repos.length) * 10;
@@ -296,7 +296,7 @@ export default {
       // this.$auth.ctx.$axios
       //   .get(`${repo.url}/stats/contributors`)
       //   .then(info => {
-      console.log(`${repo.url}/stats/contributors`);
+      // console.log(`${repo.url}/stats/contributors`);
       this.fetchAllPages(
         "commits-" + repo.id,
         ind => `${repo.url}/stats/contributors`,
@@ -608,7 +608,7 @@ export default {
       this.progress = { start: 10, value: 10, name: "Languages" };
       // this.repos = this.repos.slice(0, 10);
       this.fetchAllLanguages(() => {
-        this.languages.sort((a, b) => b.lines - a.lines);
+        this.languages.sort((a, b) => b.times - a.times);
         this.progress = { start: 30, value: 30, name: "Commits" };
         this.fetchAllCommits(() => {
           this.progress = { start: 40, value: 40, name: "Stars" };

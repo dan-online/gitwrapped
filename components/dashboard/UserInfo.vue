@@ -24,7 +24,7 @@
 export default {
   props: ["user"],
   mounted() {
-    console.log(this.user);
+    // console.log(this.user);
   }
 };
 </script>

@@ -135,13 +135,26 @@ export default {
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
     "@nuxtjs/auth-next",
-    "@nuxtjs/google-fonts"
+    "@nuxtjs/google-fonts",
+    "@nuxtjs/sentry"
   ],
+  bootstrapVue: {
+    bootstrapCSS: true,
+    bootstrapVueCSS: false,
+    icons: false
+  },
   fontawesome: {
     icons: {
       solid: true,
       brands: true
     }
+  },
+  sentry: {
+    dsn:
+      "https://16bc32df16e24e0d807596bf25278cbf@o193439.ingest.sentry.io/5580600", // Enter your project's DSN here
+    config: {
+      lazy: true
+    } // Additional config
   },
   googleFonts: {
     families: {

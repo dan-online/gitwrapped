@@ -2,10 +2,7 @@
   <div class="container pt-5 all">
     <div class="row mt-5 mx-md-5 mx-1 h-v100">
       <div class="col-md-8 p-md-3 p-0 m-md-0">
-        <a v-if="!user" @click="$auth.loginWith('github')">
-          <img src="../assets/images/promo-1.png" class="img-fluid box-hero" />
-        </a>
-        <a href="/dashboard" v-else>
+        <a @click="checkLogin">
           <img src="../assets/images/promo-1.png" class="img-fluid box-hero" />
         </a>
       </div>
@@ -42,10 +39,8 @@ githubProfile.<span class="func">getAllInfo</span>().<span class="func">then</sp
   </div>
 </template>
 
-<script lang="ts">
-import Vue from "vue";
-
-export default Vue.extend({
+<script>
+export default {
   data() {
     return {
       user: this.$store.state.auth.user
@@ -55,6 +50,15 @@ export default Vue.extend({
     return {
       title: "GitWrapped - Home"
     };
+  },
+  methods: {
+    checkLogin() {
+      if (!this.user) {
+        return this.$auth.loginWith("github");
+      } else {
+        this.$router.push("/dashboard");
+      }
+    }
   }
   // mounted() {
   //   // console.log(this.$auth);
@@ -62,7 +66,7 @@ export default Vue.extend({
   //     return this.$router.push("/dashboard");
   //   }
   // }
-});
+};
 </script>
 
 <style>
