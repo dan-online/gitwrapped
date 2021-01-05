@@ -2,6 +2,8 @@
   <div>
     <Navbar></Navbar>
     <Nuxt />
+    <Cookies></Cookies>
+    <Footer></Footer>
   </div>
 </template>
 
@@ -46,7 +48,10 @@ body {
   color: white;
   font-family: "Ubuntu Mono", monospace;
 }
-
+a {
+  color: var(--accent-light) !important;
+  text-decoration: underline;
+}
 *,
 *::before,
 *::after {

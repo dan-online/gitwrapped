@@ -1,7 +1,7 @@
 <template>
   <div class="container max">
     <transition name="fade" mode="out-in">
-      <div class="row pt-5" v-if="!finished">
+      <div class="row py-5 mb-5" v-if="!finished">
         <div class="col-md-8 mx-auto text-text text-center">
           <h1 class="mb-3">Please wait while we crunch the data!</h1>
           <Progress class="mb-3" :val="progress.value"></Progress>
@@ -38,6 +38,7 @@
                     :formatBytes="formatBytes"
                     :formatDuration="formatDuration"
                     :user="user"
+                    :year="year"
                   ></Languages>
                   <Stars
                     id="Stars"

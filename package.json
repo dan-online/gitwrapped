@@ -39,6 +39,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@nuxt/types": "^2.14.6",
     "@nuxt/typescript-build": "^2.0.3",
+    "@nuxtjs/google-analytics": "^2.4.0",
     "@nuxtjs/google-fonts": "^1.2.0"
   }
 }

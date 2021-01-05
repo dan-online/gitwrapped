@@ -8,7 +8,7 @@
       ></LineChart>
       <button @click="toggleLog">{{ log ? "Linear" : "Logarithmic" }}</button>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 mt-4 mt-md-0">
       <h2>Contributions</h2>
       <hr />
       <p>
