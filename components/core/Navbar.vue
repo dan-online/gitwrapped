@@ -101,6 +101,7 @@ export default {
   background-color: #3500d3 !important;
 }
 .navbar-brand {
+  text-decoration: none;
   color: var(--text) !important;
   font-size: 25px !important;
 }

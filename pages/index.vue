@@ -1,7 +1,7 @@
 <template>
   <div class="container pt-5 all">
-    <div class="row mt-5 mx-md-5 mx-1">
-      <div class="col-md-8 p-3 m-md-0">
+    <div class="row mt-5 mx-md-5 mx-1 h-v100">
+      <div class="col-md-8 p-md-3 p-0 m-md-0">
         <a v-if="!user" @click="$auth.loginWith('github')">
           <img src="../assets/images/promo-1.png" class="img-fluid box-hero" />
         </a>
@@ -9,7 +9,7 @@
           <img src="../assets/images/promo-1.png" class="img-fluid box-hero" />
         </a>
       </div>
-      <div class="col-md-4 box my-auto" id="hero">
+      <div class="col-md-4 box mt-md-5 mt-0" id="hero">
         <h1>GitWrapped</h1>
         <p>
           Hey there and welcome to GitWrapped. This website allows you to view
@@ -79,7 +79,9 @@ export default Vue.extend({
   color: #35495e;
   letter-spacing: 1px;
 }
-
+.h-v100 {
+  height: 80vh;
+}
 .subtitle {
   font-weight: 300;
   font-size: 42px;
