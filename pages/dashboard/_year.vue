@@ -241,9 +241,16 @@ export default {
       );
     },
     fetchAllLanguages(cb, index = 0) {
-      let repos = this.repos.filter(x => x.owner.id == this.user.id);
+      let repos = this.repos;
       const repo = repos[index];
-      if (!repo) return cb();
+      if (!repo) {
+        console.log(
+          this.repos
+            .map(x => x.name + ":" + x.languages.map(x => x.name))
+            .join("\n")
+        );
+        return cb();
+      }
       this.progress.value = this.progress.start + (index / repos.length) * 10;
       this.fetchAllPages(
         "languages-" + repo.id,
@@ -264,8 +271,10 @@ export default {
             if (curr.languages) {
               curr.languages.forEach(l => {
                 const idx = prev.findIndex(x => x.name == l.name);
-                if (idx >= 0) prev[idx].lines += l.lines;
-                else prev.push({ name: l.name, lines: l.lines });
+                if (idx >= 0) {
+                  prev[idx].lines += l.lines;
+                  prev[idx].times++;
+                } else prev.push({ name: l.name, times: 1, lines: l.lines });
               });
             }
             return prev;

@@ -5,6 +5,14 @@
       <span v-else-if="!finished">Loading..</span>
       <span v-else>Finished in {{ finished }}</span>
     </button>
+    <select class="mt-2 mt-md-0" v-model="privacy">
+      <option :value="true">
+        All repos
+      </option>
+      <option :value="false">
+        Public repos
+      </option>
+    </select>
     <canvas
       v-for="c in canvas"
       :key="c.id"
@@ -24,7 +32,8 @@ export default {
       finished: false,
       loading: false,
       canvas: [],
-      bg: require("../../assets/images/languages-bg.png")
+      bg: require("../../assets/images/languages-bg.png"),
+      privacy: true
     };
   },
   methods: {
@@ -104,7 +113,13 @@ export default {
           );
         });
         this.repos
-          .filter(x => !x.private)
+          .filter(x => {
+            if (!this.privacy) {
+              return !x.private;
+            } else {
+              return true;
+            }
+          })
           .sort((a, b) => b.contributions.c - a.contributions.c)
           .slice(0, 7)
           .map(x => {
@@ -182,5 +197,18 @@ export default {
 button[disabled] {
   filter: grayscale(0.5);
   cursor: disabled;
+}
+select {
+  border: 3px solid var(--accent);
+  background: none;
+  color: white;
+  font-size: 20px;
+  padding: 10px;
+  height: 56px;
+  transition: 0.3s all;
+}
+option {
+  color: black;
+  border: 3px solid var(--accent) !important;
 }
 </style>
