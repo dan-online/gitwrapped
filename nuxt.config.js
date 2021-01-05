@@ -5,6 +5,9 @@ export default {
     host: "localhost"
   },
   head: {
+    htmlAttrs: {
+      lang: "en"
+    },
     title: "GitWrapped",
     meta: [
       { name: "title", content: "GitWrapped - Home" },

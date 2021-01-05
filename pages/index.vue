@@ -4,6 +4,7 @@
       <div class="col-md-8 p-md-3 p-0 m-md-0">
         <a @click="checkLogin">
           <img
+            alt="GitWrapped promotion"
             src="../assets/images/promo-1-compressed.png"
             class="img-fluid box-hero"
           />

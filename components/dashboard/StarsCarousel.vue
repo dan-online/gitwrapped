@@ -4,6 +4,7 @@
       <div v-if="show">
         <div class="mb-2">
           <img
+            :alt="item.owner.login + ' pfp'"
             class="img-fluid rounded-circle"
             style="width:25px"
             :src="item.owner.avatar_url"

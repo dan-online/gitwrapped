@@ -1,6 +1,7 @@
 <template>
   <div class="col-md-12 text-center box mx-auto px-5">
     <img
+      :alt="user.login + ' pfp'"
       class="img-fluid rounded-circle"
       style="height:100px;"
       :src="user.avatar_url"

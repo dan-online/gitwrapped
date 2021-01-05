@@ -2,7 +2,11 @@
   <div>
     <nav class="navbar">
       <nuxt-link to="/" class="navbar-brand title">
-        <img src="../../static/logo-64.png" class="img-fluid navLogo" />
+        <img
+          alt="GitWrapped logo"
+          src="../../static/logo-64.png"
+          class="img-fluid navLogo"
+        />
         <span class="d-none d-md-inline">GitWrapped</span></nuxt-link
       >
       <div class="my-auto d-flex">
@@ -15,7 +19,11 @@
             class="custom-control-input"
             id="customSwitch1"
           />
-          <label class="custom-control-label" for="customSwitch1"></label>
+          <label class="custom-control-label" for="customSwitch1"
+            ><span class="d-none">{{
+              on ? "Dark mode" : "Light mode"
+            }}</span></label
+          >
         </div>
         <button @click="logInOut">
           <span class="var-text" v-if="user">Logout</span

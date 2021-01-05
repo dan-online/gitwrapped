@@ -7,6 +7,7 @@
             <div class="row">
               <div class="col-md-12">
                 <img
+                  alt="GitWrapped logo"
                   src="../../static/logo.png"
                   class="img-fluid footerLogo mb-3"
                 />
