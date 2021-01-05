@@ -1,16 +1,16 @@
 <template>
   <div class="container pt-5 all">
     <div class="row mt-5 mx-md-5 mx-1 h-v100">
-      <div class="col-md-8 p-md-3 p-0 m-md-0">
+      <div class="col-md-7 p-md-3 p-0 m-md-0">
         <a @click="checkLogin">
           <img
             alt="GitWrapped promotion"
-            src="../assets/images/promo-1-compressed.png"
+            src="../assets/images/promo.png"
             class="img-fluid box-hero"
           />
         </a>
       </div>
-      <div class="col-md-4 box mt-md-5 mt-0" id="hero">
+      <div class="col-md-5 box mt-md-5 mt-0" id="hero">
         <h1>GitWrapped</h1>
         <p>
           Hey there and welcome to GitWrapped. This website allows you to view
@@ -131,6 +131,7 @@ pre {
 }
 
 .box-hero {
+  width: 100%;
   position: relative;
   display: inline-block;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
