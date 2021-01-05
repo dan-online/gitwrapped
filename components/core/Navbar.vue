@@ -2,7 +2,7 @@
   <div>
     <nav class="navbar">
       <nuxt-link to="/" class="navbar-brand title">
-        <img src="../../static/logo.png" class="img-fluid navLogo" />
+        <img src="../../static/logo-64.png" class="img-fluid navLogo" />
         <span class="d-none d-md-inline">GitWrapped</span></nuxt-link
       >
       <div class="my-auto d-flex">

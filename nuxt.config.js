@@ -24,7 +24,7 @@ export default {
       },
       {
         property: "og:image",
-        content: "https://gitwrapped.dev/logo.png"
+        content: "https://gitwrapped.dev/logo-256.png"
       },
 
       { property: "twitter:card", content: "summary_large_image" },
@@ -37,7 +37,7 @@ export default {
       },
       {
         property: "twitter:image",
-        content: "https://gitwrapped.dev/logo.png"
+        content: "https://gitwrapped.dev/logo-256.png"
       },
 
       // { charset: "utf-8" },
@@ -50,8 +50,8 @@ export default {
       // }
     ],
     link: [
-      { rel: "icon", type: "image/png", href: "/logo.png" },
-      { rel: "shortcut icon", type: "image/png", href: "/logo.png" }
+      { rel: "icon", type: "image/png", href: "/logo-64.png" },
+      { rel: "shortcut icon", type: "image/png", href: "/logo-64.png" }
     ]
   },
   loading: {
