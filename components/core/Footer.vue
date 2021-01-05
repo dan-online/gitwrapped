@@ -55,7 +55,8 @@
         </div>
         <div class="col-md-12 text-center">
           Copyright &copy; {{ new Date().getFullYear() }} GitWrapped<br />All
-          Rights Reserved
+          Rights Reserved<br />With help from
+          <a href="https://github.com/lightenedlimited">LightenedLimited</a>
         </div>
       </div>
     </div>
