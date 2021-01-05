@@ -9,7 +9,6 @@
           v-for="link in links"
           :key="link.name"
           :href="link.url()"
-          @click.prevent="link.button"
           target="_blank"
           class="d-flex mt-2"
           :title="'Share on ' + link.name"
@@ -23,6 +22,17 @@
             link.name
           }}</span>
           <span class="sr-only">Share on {{ link.name }}</span>
+        </a>
+        <a href="#download" class="d-flex mt-2" @click.prevent="report">
+          <font-awesome-icon
+            class="shareIcon ml-0 ml-md-2 ml-lg-0"
+            :icon="['fa', 'download']"
+            aria-hidden="true"
+          ></font-awesome-icon>
+          <span class="ml-2 d-block d-md-none d-lg-block shareText"
+            >Report</span
+          >
+          <span class="sr-only">Download your report</span>
         </a>
         <!-- 
     <li>
@@ -101,36 +111,33 @@ export default {
           icon: ["fa", "envelope-square"],
           url: () =>
             "mailto:?subject=Check out " + url + "&body=" + desc + " " + url
-        },
-        {
-          name: "Report",
-          icon: ["fa", "download"],
-          url: () => "#download",
-          button: () => {
-            document.body.classList.add("toprint");
-            var svgElements = document.body.querySelectorAll("svg");
-            svgElements.forEach(function(item) {
-              item.setAttribute("width", item.getBoundingClientRect().width);
-              item.setAttribute("height", item.getBoundingClientRect().height);
-              item.style.width = null;
-              item.style.height = null;
-            });
-            html2canvas().then(h =>
-              h
-                .default(document.body, { allowTaint: true, useCORS: true })
-                .then(function(canvas) {
-                  document.body.classList.remove("toprint");
-                  var link = document.createElement("a");
-                  link.download = "full_report.png";
-                  link.href = canvas.toDataURL();
-                  link.click();
-                  // document.body.appendChild(canvas);
-                })
-            );
-          }
         }
       ]
     };
+  },
+  methods: {
+    report() {
+      document.body.classList.add("toprint");
+      var svgElements = document.body.querySelectorAll("svg");
+      svgElements.forEach(function(item) {
+        item.setAttribute("width", item.getBoundingClientRect().width);
+        item.setAttribute("height", item.getBoundingClientRect().height);
+        item.style.width = null;
+        item.style.height = null;
+      });
+      html2canvas().then(h =>
+        h
+          .default(document.body, { allowTaint: true, useCORS: true })
+          .then(function(canvas) {
+            document.body.classList.remove("toprint");
+            var link = document.createElement("a");
+            link.download = "full_report.png";
+            link.href = canvas.toDataURL();
+            link.click();
+            // document.body.appendChild(canvas);
+          })
+      );
+    }
   }
 };
 </script>
