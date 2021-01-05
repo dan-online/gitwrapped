@@ -24,7 +24,7 @@ export default {
       },
       {
         property: "og:image",
-        content: "/logo.png"
+        content: "https://gitwrapped.dev/logo.png"
       },
 
       { property: "twitter:card", content: "summary_large_image" },
@@ -37,7 +37,7 @@ export default {
       },
       {
         property: "twitter:image",
-        content: "/logo.png"
+        content: "https://gitwrapped.dev/logo.png"
       }
 
       // { charset: "utf-8" },
