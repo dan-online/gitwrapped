@@ -3,7 +3,10 @@
     <div class="row mt-5 mx-md-5 mx-1 h-v100">
       <div class="col-md-8 p-md-3 p-0 m-md-0">
         <a @click="checkLogin">
-          <img src="../assets/images/promo-1.png" class="img-fluid box-hero" />
+          <img
+            src="../assets/images/promo-1-compressed.png"
+            class="img-fluid box-hero"
+          />
         </a>
       </div>
       <div class="col-md-4 box mt-md-5 mt-0" id="hero">
