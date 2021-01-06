@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav class="navbar">
-      <nuxt-link to="/" class="navbar-brand title">
+      <nuxt-link to="/" class="navbar-brand title ml-2">
         <img
           alt="GitWrapped logo"
           src="../../static/logo-64.png"

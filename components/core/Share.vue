@@ -149,6 +149,7 @@ export default {
 .shareIcon {
   color: var(--accent-light);
   font-size: 33px;
+  width: 33px !important;
 }
 .shareText {
   color: white;
