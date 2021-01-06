@@ -289,12 +289,6 @@ export default {
     fetchAllCommits(cb, page = 0, index = 0, all = []) {
       const repo = this.repos[index];
       if (!repo) {
-        console.log(
-          this.contributions.w
-            .sort((b, a) => b.w - a.w)
-            .map(x => new Date(x.w * 1000).toDateString())
-            .join("\n")
-        );
         return cb();
       }
       this.progress.value =
