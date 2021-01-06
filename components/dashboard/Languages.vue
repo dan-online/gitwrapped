@@ -8,7 +8,7 @@
         <b>{{ nFormatter(lines) }}</b>
         lines of code. Your top language to write in was
         <b>{{ languages[0].name }}</b> with
-        {{ Math.round((languages[0].lines / all) * 100) }}%! Let's not forget
+        {{ Math.round((languages[0].times / all) * 100) }}%! Let's not forget
         your least written language: {{ languages[languages.length - 1].name }}.
         <br /><br />That's around
         <b>{{ formatBytes(50 * lines) }}</b>
@@ -51,7 +51,7 @@
 export default {
   data() {
     return {
-      all: this.languages.reduce((prev, curr) => (prev += curr.lines), 0),
+      all: this.languages.reduce((prev, curr) => (prev += curr.times), 0),
       lines: this.contributions.a
     };
   },

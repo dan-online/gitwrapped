@@ -176,10 +176,8 @@ export default {
   sentry: {
     dsn:
       "https://16bc32df16e24e0d807596bf25278cbf@o193439.ingest.sentry.io/5580600", // Enter your project's DSN here
-    config: {
-      disabled: process.env.NODE_ENV != "production",
-      lazy: true
-    } // Additional config
+    disabled: process.env.NODE_ENV != "production",
+    lazy: true
   },
   googleFonts: {
     families: {

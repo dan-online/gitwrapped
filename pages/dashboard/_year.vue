@@ -288,7 +288,15 @@ export default {
     },
     fetchAllCommits(cb, page = 0, index = 0, all = []) {
       const repo = this.repos[index];
-      if (!repo) return cb();
+      if (!repo) {
+        console.log(
+          this.contributions.w
+            .sort((b, a) => b.w - a.w)
+            .map(x => new Date(x.w * 1000).toDateString())
+            .join("\n")
+        );
+        return cb();
+      }
       this.progress.value =
         this.progress.start + (index / this.repos.length) * 10;
 
@@ -315,7 +323,7 @@ export default {
             this.contributions.d += adc.d;
             this.contributions.c += adc.c;
             info.weeks.forEach(w => {
-              let idx = this.contributions.w.find(x => x.w == w);
+              let idx = this.contributions.w.findIndex(x => x.w == w.w);
               if (idx >= 0) {
                 this.contributions.w[idx].a += w.a;
                 this.contributions.w[idx].d += w.d;
