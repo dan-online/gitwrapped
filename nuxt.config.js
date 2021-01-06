@@ -111,7 +111,7 @@ export default {
   //   { path: "/github", handler: "~/server/index.ts" }
   // ],
   // Global CSS (https://go.nuxtjs.dev/config-css)
-  css: [],
+  css: ["./assets/css/bootstrap.css"],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [],
@@ -134,22 +134,43 @@ export default {
   modules: [
     // "nuxt-fontawesome",
     // https://go.nuxtjs.dev/bootstrap
-    "bootstrap-vue/nuxt",
+    // "bootstrap-vue/nuxt",
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
     "@nuxtjs/auth-next",
     "@nuxtjs/google-fonts",
     "@nuxtjs/sentry"
   ],
-  bootstrapVue: {
-    bootstrapCSS: true,
-    bootstrapVueCSS: false,
-    icons: false
-  },
+  // bootstrapVue: {
+  //   bootstrapCSS: true,
+  //   bootstrapVueCSS: false,
+  //   componentPlugins: [],
+  //   directivePlugins: [],
+  //   icons: false
+  // },
   fontawesome: {
     icons: {
-      solid: true,
-      brands: true
+      solid: [
+        "faEnvelopeSquare",
+        "faDownload",
+        "faUsers",
+        "faUserPlus",
+        "faDoorOpen",
+        "faSave",
+        "faClock",
+        "faStar",
+        "faEye",
+        "faCodeBranch",
+        "faLink"
+      ],
+      brands: [
+        "faGithub",
+        "faFacebookSquare",
+        "faTwitterSquare",
+        "faPinterestSquare",
+        "faRedditSquare",
+        "faLinkedin"
+      ]
     }
   },
   sentry: {
@@ -175,5 +196,9 @@ export default {
   axios: {},
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
-  build: {}
+  build: {
+    // extend(config, { isDev, isClient }) {
+    //   config.externals = { moment: "moment" };
+    // }
+  }
 };

@@ -60,7 +60,7 @@ export default {
 
   methods: {
     openYear() {
-      this.$router.push("/dashboard/" + this.newYear);
+      window.location.href = "/dashboard/" + this.newYear;
     },
     goTo(name) {
       const scroll =
