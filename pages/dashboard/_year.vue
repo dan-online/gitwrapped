@@ -477,7 +477,13 @@ export default {
           //       .map(x => ({ closed_at: x.closed_at }))
           //   ];
           // }
+          pulls = pulls.filter(
+            x =>
+              new Date(x.created_at).getFullYear() == this.year &&
+              x.user.id == this.user.id
+          );
           return pulls.map(x => ({
+            title: x.title,
             closed_at: x.closed_at
           }));
         }
@@ -506,6 +512,14 @@ export default {
 
           this.issues = [...this.issues, ...issues];
           this.fetchAllIssues(cb, index + 1);
+        },
+        issues => {
+          issues = issues.filter(
+            x =>
+              new Date(x.created_at).getFullYear() == this.year &&
+              x.user.id == this.user.id
+          );
+          return issues;
         }
       );
       // this.$auth.ctx.$axios

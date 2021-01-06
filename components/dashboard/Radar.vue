@@ -10,12 +10,14 @@
         <b
           >closed
           {{
-            Math.round(
-              ((pulls.filter(x => x.closed_at).length +
-                issues.filter(x => x.closed_at).length) /
-                (pulls.length + issues.length)) *
-                100
-            )
+            pulls.length + issues.length > 0
+              ? Math.round(
+                  ((pulls.filter(x => x.closed_at).length +
+                    issues.filter(x => x.closed_at).length) /
+                    (pulls.length + issues.length)) *
+                    100
+                )
+              : 0
           }}%</b
         >
         of them.<br /><br />
