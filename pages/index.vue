@@ -5,7 +5,7 @@
         <a @click="checkLogin">
           <img
             alt="GitWrapped promotion"
-            src="../assets/images/promo.png"
+            src="../assets/images/promo-compressed.png"
             class="img-fluid box-hero"
           />
         </a>
