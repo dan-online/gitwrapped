@@ -1,5 +1,5 @@
 <template>
-  <footer>
+  <footer class="no-print">
     <div class="container max">
       <div class="row">
         <div class="col-md-8 mx-auto topFooter">

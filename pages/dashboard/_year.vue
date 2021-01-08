@@ -5,7 +5,12 @@
         <div class="col-md-8 mx-auto text-text text-center">
           <h1 class="mb-3">Please wait while we crunch the data!</h1>
           <Progress class="mb-3" :val="progress.value"></Progress>
-          <span>{{ progress.name }} - {{ Math.round(progress.value) }}%</span>
+          <span>{{ progress.name }} - {{ Math.round(progress.value) }}%</span
+          ><br />
+          <button class="mt-2" @click="notifyMe">
+            <span v-if="!notify">Notify me when ready</span
+            ><span v-else>Don't notify me</span>
+          </button>
         </div>
       </div>
     </transition>
@@ -130,6 +135,7 @@ export default {
       finished: false,
       progress: { value: 0, name: "Loading" },
       cache: {},
+      notify: false,
       year
     };
   },
@@ -166,7 +172,7 @@ export default {
       index = 0
     ) {
       let cached = this.getCache(name);
-      if (cached.data) {
+      if (cached.data && name != "repos") {
         if (new Date() - cached.date < 3600000) {
           return cb(cached.data);
         }
@@ -604,6 +610,15 @@ export default {
         " years" +
         (extra ? " and " + Math.round(days % 365) + " days " : "")
       );
+    },
+    notifyMe() {
+      if (!this.notify) {
+        Notification.requestPermission().then(permission => {
+          this.notify = true;
+        });
+      } else {
+        this.notify = false;
+      }
     }
   },
 
@@ -644,6 +659,14 @@ export default {
                         this.progress = { value: 100, name: "Render" };
                         this.$nextTick(() => {
                           this.finished = true;
+                          if (this.notify) {
+                            const notif = new Notification(
+                              `GitWrapped: Your review of ${this.year} is ready!`
+                            );
+                            notif.onclick = () => {
+                              window.focus();
+                            };
+                          }
                           // console.log(
                           //   Object.entries(lengths).map(
                           //     ([key, val]) => `${key}: ${this.nFormatter(val)}`
