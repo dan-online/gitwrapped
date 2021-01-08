@@ -294,15 +294,11 @@ export default {
       this.progress.value =
         this.progress.start + (index / this.repos.length) * 10;
 
-      // this.fetc
-      // this.$auth.ctx.$axios
-      //   .get(`${repo.url}/stats/contributors`)
-      //   .then(info => {
-      // console.log(`${repo.url}/stats/contributors`);
       this.fetchAllPages(
         "commits-" + repo.id,
         ind => `${repo.url}/stats/contributors`,
         info => {
+          console.log("INFO", info);
           if (info && info.weeks) {
             const adc = info.weeks.reduce(
               (prev, curr) => {
@@ -313,6 +309,7 @@ export default {
               },
               { a: 0, d: 0, c: 0 }
             );
+            console.log("ADC", adc);
             this.contributions.a += adc.a;
             this.contributions.d += adc.d;
             this.contributions.c += adc.c;
@@ -332,6 +329,7 @@ export default {
               d: adc.d,
               c: adc.c
             };
+            console.log("REPO", this.repos[index].contributions);
           } else {
             this.repos[index].contributions = { total: 0, a: 0, d: 0, c: 0 };
           }
@@ -346,6 +344,7 @@ export default {
               );
             }
           }
+          console.log("S", s);
           if (s) {
             return s;
           } else {

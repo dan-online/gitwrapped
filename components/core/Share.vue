@@ -54,7 +54,7 @@ const html2canvas = () => import("html2canvas");
 export default {
   data() {
     const desc =
-        "Check out GitWrapped by DanCodes, the best way to view your github statistics for the year in one wrapped up website!",
+        "Check out GitWrapped by DanCodes, the best way to view your github statistics for the year in one wrapped up website! #GitWrapped",
       url = window.location.origin;
     return {
       links: [
