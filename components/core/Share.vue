@@ -118,25 +118,27 @@ export default {
   methods: {
     report() {
       document.body.classList.add("toprint");
-      var svgElements = document.body.querySelectorAll("svg");
-      svgElements.forEach(function(item) {
-        item.setAttribute("width", item.getBoundingClientRect().width);
-        item.setAttribute("height", item.getBoundingClientRect().height);
-        item.style.width = null;
-        item.style.height = null;
-      });
-      html2canvas().then(h =>
-        h
-          .default(document.body, { allowTaint: true, useCORS: true })
-          .then(function(canvas) {
-            document.body.classList.remove("toprint");
-            var link = document.createElement("a");
-            link.download = "full_report.png";
-            link.href = canvas.toDataURL();
-            link.click();
-            // document.body.appendChild(canvas);
-          })
-      );
+      setTimeout(() => {
+        var svgElements = document.body.querySelectorAll("svg");
+        svgElements.forEach(function(item) {
+          item.setAttribute("width", item.getBoundingClientRect().width);
+          item.setAttribute("height", item.getBoundingClientRect().height);
+          item.style.width = null;
+          item.style.height = null;
+        });
+        html2canvas().then(h =>
+          h
+            .default(document.body, { allowTaint: true, useCORS: true })
+            .then(function(canvas) {
+              document.body.classList.remove("toprint");
+              var link = document.createElement("a");
+              link.download = "full_report.png";
+              link.href = canvas.toDataURL();
+              link.click();
+              // document.body.appendChild(canvas);
+            })
+        );
+      }, 2000);
     }
   }
 };
@@ -154,5 +156,8 @@ export default {
 .shareText {
   color: white;
   font-size: 20px;
+}
+.toprint {
+  width: 1920px !important;
 }
 </style>
