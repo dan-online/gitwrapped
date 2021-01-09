@@ -93,7 +93,6 @@
 </template>
 
 <script>
-let lengths = {};
 export default {
   computed: {
     user() {
@@ -141,8 +140,6 @@ export default {
   },
   methods: {
     saveCache(name, data) {
-      if (!lengths[name.split("-")[0]]) lengths[name.split("-")[0]] = 0;
-      lengths[name.split("-")[0]] += JSON.stringify(data).length;
       localStorage["git_cache_" + name + "_data"] = JSON.stringify(data); // this autosaves
       localStorage["git_cache_" + name] = new Date().toISOString();
     },
@@ -258,7 +255,7 @@ export default {
         // );
         return cb();
       }
-      this.progress.value = this.progress.start + (index / repos.length) * 10;
+      // this.progress.value = this.progress.start + (index / repos.length) * 10;
       this.fetchAllPages(
         "languages-" + repo.id,
         ind => repo.languages_url,
@@ -297,8 +294,8 @@ export default {
       if (!repo) {
         return cb();
       }
-      this.progress.value =
-        this.progress.start + (index / this.repos.length) * 10;
+      // this.progress.value =
+      //   this.progress.start + (index / this.repos.length) * 10;
 
       this.fetchAllPages(
         "commits-" + repo.id,
@@ -457,8 +454,8 @@ export default {
         if (idx >= 0) this.pulls[idx].closedUse = true;
         return cb();
       }
-      this.progress.value =
-        this.progress.start + (index / this.repos.length) * 10;
+      // this.progress.value =
+      //   this.progress.start + (index / this.repos.length) * 10;
 
       this.fetchAllPages(
         "pulls-" + repo.id,
@@ -504,8 +501,8 @@ export default {
         );
         return cb();
       }
-      this.progress.value =
-        this.progress.start + (index / this.repos.length) * 10;
+      // this.progress.value =
+      //   this.progress.start + (index / this.repos.length) * 10;
       this.fetchAllPages(
         "issues-" + repo.id,
         ind =>
@@ -636,66 +633,103 @@ export default {
     //im so sorry - dancodes and lightenedlimited
     this.progress = { value: 0, name: "Repos" };
     this.fetchAllRepos(() => {
-      this.progress = { start: 10, value: 10, name: "Languages" };
-      // this.repos = this.repos.slice(0, 10);
-      this.fetchAllLanguages(() => {
-        this.languages.sort((a, b) => b.times - a.times);
-        this.progress = { start: 30, value: 30, name: "Commits" };
-        this.fetchAllCommits(() => {
-          this.progress = { start: 40, value: 40, name: "Stars" };
-          this.fetchAllStars(() => {
-            this.progress = { start: 50, value: 50, name: "Watches" };
-            this.fetchAllWatches(() => {
-              this.progress = { start: 60, value: 60, name: "Pulls" };
-              this.fetchAllPulls(() => {
-                this.progress = { start: 70, value: 70, name: "Issues" };
-                this.fetchAllIssues(() => {
-                  this.progress = { start: 80, value: 80, name: "Followers" };
-                  this.fetchAllFollowers(() => {
-                    this.progress = { start: 90, value: 90, name: "Following" };
-                    this.fetchAllFollowing(() => {
-                      this.progress = { value: 95, name: "Events" };
-                      this.fetchAllEvents(() => {
-                        this.progress = { value: 100, name: "Render" };
-                        this.$nextTick(() => {
-                          this.finished = true;
-                          if (this.notify) {
-                            const notif = new Notification(
-                              `GitWrapped: Your review of ${this.year} is ready!`
-                            );
-                            notif.onclick = () => {
-                              window.focus();
-                            };
-                          }
-                          // console.log(
-                          //   Object.entries(lengths).map(
-                          //     ([key, val]) => `${key}: ${this.nFormatter(val)}`
-                          //   )
-                          // );
-                          // console.log(
-                          //   (Object.entries(lengths).reduce(
-                          //     (prev, [key, val]) => (prev += val),
-                          //     0
-                          //   ) /
-                          //     5238346) *
-                          //     100
-                          // );
-                          // this.$nextTick(() => {
-                          //   this.divs = Object.entries(this.$refs).map(x => ({
-                          //     name: x[0],
-                          //     value: x[1]
-                          //   }));
-                          // });
-                        });
-                      });
-                    });
-                  });
-                });
-              });
+      this.progress = { start: 10, value: 10, name: "Stats" };
+      let funcs = [
+        "fetchAllLanguages",
+        "fetchAllCommits",
+        "fetchAllStars",
+        "fetchAllWatches",
+        "fetchAllPulls",
+        "fetchAllIssues",
+        "fetchAllFollowers",
+        "fetchAllFollowing",
+        "fetchAllFollowers",
+        "fetchAllEvents"
+      ];
+      funcs = funcs.map(
+        fn =>
+          new Promise((res, rej) => {
+            this[fn](() => {
+              res();
+              this.progress.name = fn.split("fetchAll")[1];
+              this.progress.value += 90 / funcs.length;
             });
-          });
+          })
+      );
+      Promise.all(funcs).then(() => {
+        this.languages.sort((a, b) => b.times - a.times);
+        this.progress = { value: 100, name: "Render" };
+        this.$nextTick(() => {
+          this.finished = true;
+          if (this.notify) {
+            const notif = new Notification(
+              `GitWrapped: Your review of ${this.year} is ready!`
+            );
+            notif.onclick = () => {
+              window.focus();
+            };
+          }
         });
       });
+      // this.repos = this.repos.slice(0, 10);
+      // this.fetchAllLanguages(() => {
+      //   this.languages.sort((a, b) => b.times - a.times);
+      //   this.progress = { start: 30, value: 30, name: "Commits" };
+      //   this.fetchAllCommits(() => {
+      //     this.progress = { start: 40, value: 40, name: "Stars" };
+      //     this.fetchAllStars(() => {
+      //       this.progress = { start: 50, value: 50, name: "Watches" };
+      //       this.fetchAllWatches(() => {
+      //         this.progress = { start: 60, value: 60, name: "Pulls" };
+      //         this.fetchAllPulls(() => {
+      //           this.progress = { start: 70, value: 70, name: "Issues" };
+      //           this.fetchAllIssues(() => {
+      //             this.progress = { start: 80, value: 80, name: "Followers" };
+      //             this.fetchAllFollowers(() => {
+      //               this.progress = { start: 90, value: 90, name: "Following" };
+      //               this.fetchAllFollowing(() => {
+      //                 this.progress = { value: 95, name: "Events" };
+      //                 this.fetchAllEvents(() => {
+      //                   this.progress = { value: 100, name: "Render" };
+      //                   this.$nextTick(() => {
+      //                     this.finished = true;
+      //                     if (this.notify) {
+      //                       const notif = new Notification(
+      //                         `GitWrapped: Your review of ${this.year} is ready!`
+      //                       );
+      //                       notif.onclick = () => {
+      //                         window.focus();
+      //                       };
+      //                     }
+      //                     // console.log(
+      //                     //   Object.entries(lengths).map(
+      //                     //     ([key, val]) => `${key}: ${this.nFormatter(val)}`
+      //                     //   )
+      //                     // );
+      //                     // console.log(
+      //                     //   (Object.entries(lengths).reduce(
+      //                     //     (prev, [key, val]) => (prev += val),
+      //                     //     0
+      //                     //   ) /
+      //                     //     5238346) *
+      //                     //     100
+      //                     // );
+      //                     // this.$nextTick(() => {
+      //                     //   this.divs = Object.entries(this.$refs).map(x => ({
+      //                     //     name: x[0],
+      //                     //     value: x[1]
+      //                     //   }));
+      //                     // });
+      //                   });
+      //                 });
+      //               });
+      //             });
+      //           });
+      //         });
+      //       });
+      //     });
+      //   });
+      // });
     });
   }
 };
