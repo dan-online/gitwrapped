@@ -301,7 +301,7 @@ export default {
         "commits-" + repo.id,
         ind => `${repo.url}/stats/contributors`,
         info => {
-          console.log("INFO", info);
+          // console.log("INFO", info);
           if (info && info.weeks) {
             const adc = info.weeks.reduce(
               (prev, curr) => {
@@ -312,7 +312,7 @@ export default {
               },
               { a: 0, d: 0, c: 0 }
             );
-            console.log("ADC", adc);
+            // console.log("ADC", adc);
             this.contributions.a += adc.a;
             this.contributions.d += adc.d;
             this.contributions.c += adc.c;
@@ -332,7 +332,7 @@ export default {
               d: adc.d,
               c: adc.c
             };
-            console.log("REPO", this.repos[index].contributions);
+            // console.log("REPO", this.repos[index].contributions);
           } else {
             this.repos[index].contributions = { total: 0, a: 0, d: 0, c: 0 };
           }
@@ -347,7 +347,7 @@ export default {
               );
             }
           }
-          console.log("S", s);
+          // console.log("S", s);
           if (s) {
             return s;
           } else {
