@@ -609,6 +609,9 @@ export default {
       );
     },
     notifyMe() {
+      if (!("Notification" in window)) {
+        alert("This browser does not support desktop notification");
+      }
       if (!this.notify) {
         Notification.requestPermission().then(permission => {
           this.notify = true;
