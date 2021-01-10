@@ -140,8 +140,10 @@ export default {
   },
   methods: {
     saveCache(name, data) {
-      localStorage["git_cache_" + name + "_data"] = JSON.stringify(data); // this autosaves
-      localStorage["git_cache_" + name] = new Date().toISOString();
+      try {
+        localStorage["git_cache_" + name + "_data"] = JSON.stringify(data); // this autosaves
+        localStorage["git_cache_" + name] = new Date().toISOString();
+      } catch (err) {}
     },
     clearCache() {
       Object.keys(localStorage).forEach(key => {
@@ -151,12 +153,15 @@ export default {
       });
     },
     getCache(name) {
-      let got = localStorage["git_cache_" + name + "_data"];
+      let got;
+      let date;
+      try {
+        got = localStorage["git_cache_" + name + "_data"];
+        date = localStorage["git_cache_" + name];
+      } catch {}
       return {
-        data: got
-          ? JSON.parse(localStorage["git_cache_" + name + "_data"])
-          : null,
-        date: got ? new Date(localStorage["git_cache_" + name]) : null
+        data: got ? JSON.parse(got) : null,
+        date: got ? new Date(date) : null
       };
     },
     fetchAllPages(
