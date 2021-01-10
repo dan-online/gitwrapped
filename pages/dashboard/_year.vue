@@ -174,27 +174,33 @@ export default {
           return cb(cached.data);
         }
       }
-      this.$auth.ctx.$axios.get(url(index)).then(({ data }) => {
-        if (!returnDone) {
-          all = [...all, ...data];
-        }
-        if (!returnDone && data.length >= 100 && index < 10) {
-          return this.fetchAllPages(
-            name,
-            url,
-            cb,
-            strip,
-            returnDone,
-            all,
-            index + 1
-          );
-        } else {
-          let returnType = returnDone ? data : all;
-          returnType = strip(returnType);
-          if (returnType) this.saveCache(name, returnType);
-          return cb(returnType);
-        }
-      });
+      this.$auth.ctx.$axios
+        .get(url(index))
+        .then(({ data }) => {
+          if (!returnDone) {
+            all = [...all, ...data];
+          }
+          if (!returnDone && data.length >= 100 && index < 10) {
+            return this.fetchAllPages(
+              name,
+              url,
+              cb,
+              strip,
+              returnDone,
+              all,
+              index + 1
+            );
+          } else {
+            let returnType = returnDone ? data : all;
+            returnType = strip(returnType);
+            if (returnType) this.saveCache(name, returnType);
+            return cb(returnType);
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          cb([]);
+        });
     },
     fetchAllRepos(cb) {
       const since = this.jan;
