@@ -12,7 +12,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/vue-fontawesome": "^2.0.0",
     "@nuxt/typescript-runtime": "^2.0.0",
-    "@nuxtjs/auth-next": "^5.0.0-1608461079.ae1e5db",
+    "@nuxtjs/auth-next": "^5.0.0-1610115973.9fdaa66",
     "@nuxtjs/axios": "^5.12.2",
     "@nuxtjs/fontawesome": "^1.1.2",
     "@nuxtjs/sentry": "^4.5.0",
