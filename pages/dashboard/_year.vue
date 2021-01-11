@@ -185,7 +185,7 @@ export default {
           if (!returnDone) {
             all = [...all, ...data];
           }
-          if (!returnDone && data.length >= 100 && index < 10) {
+          if (!returnDone && data.length >= 100) {
             return this.fetchAllPages(
               name,
               url,
