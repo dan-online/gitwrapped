@@ -36,7 +36,7 @@
     "vue-chartjs": "^3.5.1"
   },
   "devDependencies": {
-    "@fortawesome/free-brands-svg-icons": "^5.15.1",
+    "@fortawesome/free-brands-svg-icons": "^5.15.2",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@nuxt/types": "^2.14.6",
     "@nuxt/typescript-build": "^2.0.3",
