@@ -1262,10 +1262,10 @@
     webpack-node-externals "^2.5.2"
     webpackbar "^4.0.0"
 
-"@nuxtjs/auth-next@^5.0.0-1608461079.ae1e5db":
-  version "5.0.0-1608461079.ae1e5db"
-  resolved "https://registry.yarnpkg.com/@nuxtjs/auth-next/-/auth-next-5.0.0-1608461079.ae1e5db.tgz#1755501845da6efd8cc3d90d14a1c0747f3dfa47"
-  integrity sha512-TROyjrRTrjXkADdHVWFekr0y3itZXEBmpY7EyWzeCgQCNfmSXBRnnr8HOtBu8BfD3Oj8F1VCKpPssQGFxLWnuQ==
+"@nuxtjs/auth-next@^5.0.0-1610642462.1bcdc1e":
+  version "5.0.0-1610642462.1bcdc1e"
+  resolved "https://registry.yarnpkg.com/@nuxtjs/auth-next/-/auth-next-5.0.0-1610642462.1bcdc1e.tgz#70f2212077ff4fac035ee1dcc77d5859c3f64c38"
+  integrity sha512-rB+eZ2jiKzUPi4ENbK+MOO+h8MZjoqHUG/V4Ok1U9arQnRULNPwdvna8oKn7o871akibQvy45nAB8tTHKW/7bA==
   dependencies:
     "@nuxtjs/axios" "^5.12.4"
     axios "^0.21.0"
