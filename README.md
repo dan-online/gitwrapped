@@ -1,4 +1,6 @@
-# github-wrapped
+# GitWrapped
+
+The official repo of [gitwrapped.dev](https://gitwrapped.dev)
 
 ## Build Setup
 
