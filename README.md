@@ -1,3 +1,5 @@
+![](static/logo-128.png)
+
 # GitWrapped
 
 The official repo of [gitwrapped.dev](https://gitwrapped.dev)
