@@ -19,4 +19,13 @@ $ yarn start
 $ yarn generate
 ```
 
+## Environment
+
+.env file:
+
+```env
+CLIENT_ID=<id>
+CLIENT_SECRET=<secret>
+```
+
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
