@@ -38,11 +38,11 @@
                   <li>
                     <a href="https://dancodes.online">DanCodes</a>
                   </li>
-                  <!-- <li>
+                  <li>
                     <a href="https://github.com/dan-online/gitwrapped"
                       >Github</a
                     >
-                  </li> -->
+                  </li>
                   <li>
                     <a href="https://api.dancodes.online/api/v2/link/discord"
                       >Discord</a
