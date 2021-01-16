@@ -141,7 +141,7 @@ export default {
   methods: {
     saveCache(name, data) {
       try {
-        localStorage["git_cache_" + name + "_data"] = JSON.stringify(data); // this autosaves
+        localStorage["git_cache_" + name + "_data"] = JSON.stringify(data);
         localStorage["git_cache_" + name] = new Date().toISOString();
       } catch (err) {}
     },
@@ -645,7 +645,6 @@ export default {
       this.clearCache();
       localStorage.lastYear = this.year;
     }
-    //im so sorry - dancodes and lightenedlimited
     this.progress = { value: 0, name: "Repos" };
     this.fetchAllRepos(() => {
       this.progress = { start: 10, value: 10, name: "Stats" };
